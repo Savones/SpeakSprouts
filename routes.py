@@ -20,6 +20,13 @@ def open_new():
     words = users.getUsernames(session["username"])
     return render_template("new.html", items = words)
 
+@app.route("/open_chat")
+def open_chat():
+    chat_id = messages.get_chat_id(session["username"], request.args.get("username"))
+    session["chat_id"] = chat_id
+    print(f"in open_chat id is {chat_id}")
+    return redirect(f"/chat?username={request.args.get('username')}")
+
 @app.route("/login",methods=["POST"])
 def login():
     username = request.form["username"]
@@ -45,12 +52,10 @@ def register():
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
-    print((request.args.get("username")))
+    print(f"chat id is {session['chat_id']}")
     if request.method == "POST":
-        print(request.args.get("username"))
         message = request.form["message"]
         messages.save_message(session["username"], request.args.get("username"), message)
-        print(request.args.get("username"))
     return render_template("chat.html", other_chatter=request.args.get("username"))
 
 

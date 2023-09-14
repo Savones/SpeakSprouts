@@ -10,7 +10,7 @@
         <p>Olet kirjautunut nimellä {{ session.username }}</p>
         <ul>
             {% for item in items %}
-            <a href="/chat?username={{ item[0] }}"> {{ item[0] }}</a>
+            <a href="/open_chat?username={{ item[0] }}"> {{ item[0] }}</a>
             {% endfor %}
         </ul>
         <a href="/logout">Kirjaudu ulos</a>
