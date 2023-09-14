@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, request, redirect, session
 import users
+import messages
 
 @app.route("/")
 def index():
@@ -42,7 +43,15 @@ def register():
         return redirect("/open_new")
     return render_template("register.html")
 
-@app.route("/chat", methods=["GET"])
+@app.route("/chat", methods=["GET", "POST"])
 def chat():
-    selected_username = request.args.get("username")
-    return render_template("chat.html", other_chatter = selected_username)
+    print((request.args.get("username")))
+    if request.method == "POST":
+        print(request.args.get("username"))
+        message = request.form["message"]
+        messages.save_message(session["username"], request.args.get("username"), message)
+        print(request.args.get("username"))
+    return render_template("chat.html", other_chatter=request.args.get("username"))
+
+
+

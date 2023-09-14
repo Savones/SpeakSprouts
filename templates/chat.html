@@ -8,6 +8,11 @@
     </head>
     <body>
         <p>This is your chat with {{ other_chatter }}</p>
-        <a href="/logout">Kirjaudu ulos</a>
+        <form method="POST" action="/chat?username={{ other_chatter }}">
+            <textarea type="text" name="message"></textarea><br>
+            <input type="submit" value="Send">
+        </form>
+        <a href="/logout">Logout</a>
     </body>
 </html>
+
