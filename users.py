@@ -29,3 +29,11 @@ def createUser(username, password):
     sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
     db.session.execute(sql, {"username":username, "password":hash_value})
     db.session.commit()
+
+def getUsernames(username):
+    sql = text("SELECT username FROM users WHERE username <> :username")
+    result = db.session.execute(sql, {"username":username})
+    return result
+
+def addChat(username, otherUsername):
+    pass
