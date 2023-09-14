@@ -7,13 +7,13 @@
         <link rel="stylesheet" href="static/main.css">
     </head>
     <body>
-        <p>Olet kirjautunut nimellä {{ session.username }}</p>
+        <h2>Welcome {{ session.username }}</h2>
         <ul>
             {% for item in items %}
-            <a href="/open_chat?username={{ item[0] }}"> {{ item[0] }}</a>
+            <a class="user_link" href="/open_chat?username={{ item[0] }}"> {{ item[0] }}</a>
             {% endfor %}
         </ul>
-        <a href="/logout">Kirjaudu ulos</a>
+        <a href="/logout">Logout</a>
     </body>
 </html>
 

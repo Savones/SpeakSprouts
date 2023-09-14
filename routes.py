@@ -51,10 +51,11 @@ def register():
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
+    sent_messages = ["moi", "Tämä on testi viesti", "Saatko näitä??"]
     if request.method == "POST":
         message = request.form["message"]
         messages.save_message(session["chat_id"],session["username"], message)
-    return render_template("chat.html", other_chatter=request.args.get("username"))
+    return render_template("chat.html", other_chatter=request.args.get("username"), messages=sent_messages)
 
 
 

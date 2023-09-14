@@ -27,3 +27,49 @@ a:hover {
 ul a {
     background-color: rgb(255, 239, 218);
 }
+
+ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    list-style: none;
+    text-align: center;
+    padding: 0;
+}
+
+.user_link {
+    width: 100px;
+    border: 1px solid rgb(0, 0, 0);
+    margin: 0;
+}
+
+.chat_form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.chat_form input {
+    width: min-content;
+    padding: 10px;
+}
+
+textarea {
+    width: 250px;
+    height: 100px;
+    resize: none;
+}
+
+.messages_container {
+    margin: 30px;
+}
+
+.single_message {
+    background-color: rgb(196, 245, 229);
+    color: black;
+    padding: 20px;
+    margin: 10px;
+}
