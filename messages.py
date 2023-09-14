@@ -1,5 +1,6 @@
 from db import db
 from sqlalchemy.sql import text
+from datetime import datetime
 
 def get_chat_id(sender_name, receiver_name):
     sender_id_query = text("SELECT id FROM users WHERE username = :username")
@@ -35,9 +36,19 @@ def get_chat_id(sender_name, receiver_name):
     return chat_id
 
 
-def save_message(sender_name, receiver_name, message):
-    pass
+def save_message(chat_id, sender_username, message):
 
-    # sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
-    # db.session.execute(sql, {"username":username, "password":hash_value})
-    # db.session.commit()
+    sender_id_query = text("SELECT id FROM users WHERE username = :username")
+    sender_id = db.session.execute(sender_id_query, {"username": sender_username}).scalar()
+
+    timestamp = datetime.now()
+
+    insert_message = text(
+            "INSERT INTO messages (chat_id, sender_id, message_text, timestamp) VALUES (:chat_id, :sender_id, :message_text, :timestamp)"
+        )
+    
+    db.session.execute(
+            insert_message, {"chat_id":chat_id, "sender_id":sender_id, "message_text":message, "timestamp":timestamp}
+        )
+    
+    db.session.commit()
