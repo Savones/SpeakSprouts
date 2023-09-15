@@ -17,3 +17,10 @@ CREATE TABLE messages (
     message_text TEXT NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE languages (
+    id SERIAL PRIMARY KEY,
+    language_name VARCHAR(255) NOT NULL,
+    native_name VARCHAR(255) NOT NULL,
+    iso_639_1_code CHAR(2) NOT NULL
+);

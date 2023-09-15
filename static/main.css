@@ -58,13 +58,16 @@ ul {
 }
 
 textarea {
-    width: 250px;
+    width: 350px;
     height: 100px;
     resize: none;
 }
 
 .messages_container {
     margin: 30px;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
 }
 
 .single_message {
@@ -72,6 +75,11 @@ textarea {
     color: black;
     padding: 20px;
     margin: 10px;
+    width: 200px;
+}
+
+.sender_message {
+    align-self: flex-end;
 }
 
 .receiver_message {

@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, request, redirect, session
+from flask import render_template, request, redirect, session, make_response
 import users
 import messages
 
@@ -58,4 +58,8 @@ def chat():
     return render_template("chat.html", other_chatter=request.args.get("username"), messages=sent_messages, sender = sender_id)
 
 
+# For security
 
+# response = make_response(render_template("login.html"))
+# response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate'
+# return response

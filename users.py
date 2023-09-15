@@ -34,6 +34,3 @@ def getUsernames(username):
     sql = text("SELECT username FROM users WHERE username <> :username")
     result = db.session.execute(sql, {"username":username})
     return result
-
-def addChat(username, otherUsername):
-    pass
