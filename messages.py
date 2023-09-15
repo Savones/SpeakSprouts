@@ -52,3 +52,11 @@ def save_message(chat_id, sender_username, message):
         )
     
     db.session.commit()
+
+def get_messages(chat_id, username):
+    sender_id_query = text("SELECT id FROM users WHERE username = :username")
+    sender_id = db.session.execute(sender_id_query, {"username": username}).scalar()
+
+    messages_query = text("SELECT message_text, sender_id FROM messages WHERE chat_id = :chat_id")
+    messages = db.session.execute(messages_query, {"chat_id": chat_id})
+    return messages, sender_id

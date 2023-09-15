@@ -10,7 +10,11 @@
         <h2>Chat with {{ other_chatter }}</h2>
         <div class="messages_container">
             {% for message in messages %}
-            <div class="single_message"> {{ message }} </div>
+                {% if message[1] == sender %}
+                    <div class="single_message sender_message"> {{ message[0] }} </div>
+                {% else %}
+                    <div class="single_message receiver_message"> {{ message[0] }} </div>
+                {% endif %}
             {% endfor %}
         </div>
         <form class="chat_form" method="POST" action="/chat?username={{ other_chatter }}">

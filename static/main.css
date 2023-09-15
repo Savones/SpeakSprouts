@@ -73,3 +73,7 @@ textarea {
     padding: 20px;
     margin: 10px;
 }
+
+.receiver_message {
+    background-color: rgb(255, 168, 168);
+}
