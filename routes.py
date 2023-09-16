@@ -58,9 +58,9 @@ def chat():
     sent_messages, sender_id = messages.get_messages(session["chat_id"],session["username"])
     return render_template("chat.html", other_chatter=request.args.get("username"), messages=sent_messages, sender = sender_id)
 
-@app.route("/profile")
+@app.route("/profile", methods=["GET"])
 def profile():
-    profile_info = profiles.get_profile(session["username"])
+    profile_info = profiles.get_profile(request.args.get("username"))
     print(profile_info)
     return render_template("profile.html", profile = profile_info)
 

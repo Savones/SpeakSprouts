@@ -8,10 +8,13 @@
     </head>
     <body>
         <h2>Welcome {{ session.username }}</h2>
-        <a href="/profile">My profile</a>
+        <a href="/profile?username={{ session.username }}">My profile</a>
         <ul>
             {% for item in items %}
-            <a class="user_link" href="/open_chat?username={{ item[0] }}"> {{ item[0] }}</a>
+            <div class="user_links">
+                <a class="user_link" href="/open_chat?username={{ item[0] }}">Chat with {{ item[0] }}</a>
+                <a class="user_link profile_link" href="/profile?username={{ item[0] }}">Open {{ item[0] }} profile</a>
+            </div>
             {% endfor %}
         </ul>
         <a href="/logout">Logout</a>
