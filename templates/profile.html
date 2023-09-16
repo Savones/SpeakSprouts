@@ -9,6 +9,7 @@
     <body>
         {% if profile["username"] == session.username %}
             <h2>This is your profile!</h2 >
+            <a href="/edit_profile">Edit profile</a>
         {% else %}
             <h2>{{ profile["username"] }}'s profile</h2 >
         {% endif %}

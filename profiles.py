@@ -13,3 +13,10 @@ def get_profile(username):
     profile_dict["color"] = profile[6]
 
     return profile_dict
+
+def update_profile(username, updated_profile):
+
+    for key, value in updated_profile.items():
+        sql = text(f"UPDATE profiles SET {key} = :value WHERE username = :username")
+        db.session.execute(sql, {"key":key, "value":value, "username":username})
+    db.session.commit()

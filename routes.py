@@ -58,15 +58,27 @@ def chat():
     sent_messages, sender_id = messages.get_messages(session["chat_id"],session["username"])
     return render_template("chat.html", other_chatter=request.args.get("username"), messages=sent_messages, sender = sender_id)
 
-@app.route("/profile", methods=["GET"])
+@app.route("/profile", methods=["GET", "POST"])
 def profile():
-    profile_info = profiles.get_profile(request.args.get("username"))
-    print(profile_info)
-    return render_template("profile.html", profile = profile_info)
+    if request.method == "GET":
+        profile_info = profiles.get_profile(request.args.get("username"))
+        return render_template("profile.html", profile=profile_info)
+    elif request.method == "POST":
+        updated_profile = {}
+        for key, value in request.form.items():
+            updated_profile[key] = value
+        profiles.update_profile(session["username"], updated_profile)
+        return redirect("/profile?username=" + session["username"])
 
+@app.route("/edit_profile")
+def edit_profile():
+    profile_info = profiles.get_profile(session["username"])
+    return render_template("edit.html", profile = profile_info)
 
 # For security
 
 # response = make_response(render_template("login.html"))
 # response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate'
 # return response
+
+# add checks for the right to open a page
