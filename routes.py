@@ -2,6 +2,7 @@ from app import app
 from flask import render_template, request, redirect, session, make_response
 import users
 import messages
+import profiles
 
 @app.route("/")
 def index():
@@ -56,6 +57,12 @@ def chat():
         messages.save_message(session["chat_id"],session["username"], message)
     sent_messages, sender_id = messages.get_messages(session["chat_id"],session["username"])
     return render_template("chat.html", other_chatter=request.args.get("username"), messages=sent_messages, sender = sender_id)
+
+@app.route("/profile")
+def profile():
+    profile_info = profiles.get_profile(session["username"])
+    print(profile_info)
+    return render_template("profile.html", profile = profile_info)
 
 
 # For security

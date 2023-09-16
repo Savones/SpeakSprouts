@@ -24,3 +24,13 @@ CREATE TABLE languages (
     native_name VARCHAR(255) NOT NULL,
     iso_639_1_code CHAR(2) NOT NULL
 );
+
+CREATE TABLE profiles (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    user_id INT NOT NULL UNIQUE,
+    languages_known JSONB,
+    language_levels JSONB,
+    bio TEXT,
+    profile_color VARCHAR(7)
+);

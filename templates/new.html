@@ -8,6 +8,7 @@
     </head>
     <body>
         <h2>Welcome {{ session.username }}</h2>
+        <a href="/profile">My profile</a>
         <ul>
             {% for item in items %}
             <a class="user_link" href="/open_chat?username={{ item[0] }}"> {{ item[0] }}</a>

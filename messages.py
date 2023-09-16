@@ -21,6 +21,7 @@ def get_chat_id(sender_name, receiver_name):
         chat_id_query, {"user1_id": sender_id, "user2_id": receiver_id}
     ).scalar()
 
+    # Adds the chat to chats tables if doesn't exist yet
     if chat_id is None:
         chat_insert_query = text(
             "INSERT INTO chats (user1_id, user2_id) VALUES (:user1_id, :user2_id) RETURNING id"

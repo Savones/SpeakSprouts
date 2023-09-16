@@ -8,7 +8,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 db = SQLAlchemy(app)
 
 def read_json():
-    # should only be added if doesn't exist yet
+    # Adds the languages from json file to languages table in db
+    # Should only be added if doesn't exist yet
     with open('datasets/languages.json', 'r') as file:
         data = json.load(file)
 
