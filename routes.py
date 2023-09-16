@@ -3,6 +3,8 @@ from flask import render_template, request, redirect, session, make_response
 import users
 import messages
 import profiles
+import db
+import json
 
 @app.route("/")
 def index():
@@ -66,14 +68,19 @@ def profile():
     elif request.method == "POST":
         updated_profile = {}
         for key, value in request.form.items():
-            updated_profile[key] = value
+            if key == "languages_known":
+                updated_profile[key] = json.dumps(request.form.getlist("languages_known"))
+            else:
+                updated_profile[key] = value
+        print(updated_profile)
         profiles.update_profile(session["username"], updated_profile)
         return redirect("/profile?username=" + session["username"])
 
 @app.route("/edit_profile")
 def edit_profile():
     profile_info = profiles.get_profile(session["username"])
-    return render_template("edit.html", profile = profile_info)
+    languages = db.get_languages()
+    return render_template("edit.html", profile = profile_info, languages = languages)
 
 # For security
 

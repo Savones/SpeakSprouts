@@ -4,6 +4,24 @@
     <form method="POST" action="/profile?username={{ session.username }}">
         <p>Your bio</p>
         <textarea type="text" name="bio"></textarea><br>
+        <button type="button" onclick="openLanguageSelection()">Add language</button>
+        <div id="languages_selection" class="hidden">
+            {% for item in languages %}
+            <div class="language_box">
+                <input type="checkbox" name="languages_known" value="{{ item[0] }}">
+                <label>{{ item[0] }}</label><br>
+            </div>
+            {% endfor %}
+        </div>
         <input type="submit" value="Save">
     </form>
+{% endblock %}
+
+{% block scirpt %}
+<script>
+    function openLanguageSelection() {
+        const languagesContainer = document.getElementById('languages_selection');
+        languagesContainer.classList.add('languages_container');
+    }
+</script>
 {% endblock %}

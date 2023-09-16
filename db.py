@@ -23,3 +23,7 @@ def read_json():
         db.session.execute(sql, {"language_name":language_name, "native_name":native_name, "iso_639_1_code":iso_639_1_code})
     db.session.commit()
         
+def get_languages():
+    sql = text("SELECT language_name FROM languages")
+    languages = db.session.execute(sql).fetchall()
+    return languages

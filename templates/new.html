@@ -4,9 +4,10 @@
     <a href="/profile?username={{ session.username }}">My profile</a>
     <ul>
         {% for item in items %}
+        <h3>{{ item[0] }}</h3>
         <div class="user_links">
-            <a class="user_link" href="/open_chat?username={{ item[0] }}">Chat with {{ item[0] }}</a>
-            <a class="user_link profile_link" href="/profile?username={{ item[0] }}">Open {{ item[0] }} profile</a>
+            <a class="user_link" href="/open_chat?username={{ item[0] }}">Chat</a>
+            <a class="user_link profile_link" href="/profile?username={{ item[0] }}">Profile</a>
         </div>
         {% endfor %}
     </ul>
