@@ -1,23 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SpeakSprouts</title>
-        <link rel="stylesheet" href="static/main.css">
-    </head>
-    <body>
-        <h2>Welcome {{ session.username }}</h2>
-        <a href="/profile?username={{ session.username }}">My profile</a>
-        <ul>
-            {% for item in items %}
-            <div class="user_links">
-                <a class="user_link" href="/open_chat?username={{ item[0] }}">Chat with {{ item[0] }}</a>
-                <a class="user_link profile_link" href="/profile?username={{ item[0] }}">Open {{ item[0] }} profile</a>
-            </div>
-            {% endfor %}
-        </ul>
-        <a href="/logout">Logout</a>
-    </body>
-</html>
-
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Welcome {{ session.username }}</h2>
+    <a href="/profile?username={{ session.username }}">My profile</a>
+    <ul>
+        {% for item in items %}
+        <div class="user_links">
+            <a class="user_link" href="/open_chat?username={{ item[0] }}">Chat with {{ item[0] }}</a>
+            <a class="user_link profile_link" href="/profile?username={{ item[0] }}">Open {{ item[0] }} profile</a>
+        </div>
+        {% endfor %}
+    </ul>
+    <a href="/logout">Logout</a>
+{% endblock %}

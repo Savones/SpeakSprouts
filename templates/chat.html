@@ -1,27 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SpeakSprouts</title>
-        <link rel="stylesheet" href="static/main.css">
-    </head>
-    <body>
-        <h2>Chat with {{ other_chatter }}</h2>
-        <div class="messages_container">
-            {% for message in messages %}
-                {% if message[1] == sender %}
-                    <div class="single_message sender_message"> {{ message[0] }} </div>
-                {% else %}
-                    <div class="single_message receiver_message"> {{ message[0] }} </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-        <form class="chat_form" method="POST" action="/chat?username={{ other_chatter }}">
-            <textarea type="text" name="message"></textarea><br>
-            <input type="submit" value="Send">
-        </form>
-        <a href="/logout">Logout</a>
-    </body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Chat with {{ other_chatter }}</h2>
+    <div class="messages_container">
+        {% for message in messages %}
+            {% if message[1] == sender %}
+                <div class="single_message sender_message"> {{ message[0] }} </div>
+            {% else %}
+                <div class="single_message receiver_message"> {{ message[0] }} </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <form class="chat_form" method="POST" action="/chat?username={{ other_chatter }}">
+        <textarea type="text" name="message"></textarea><br>
+        <input type="submit" value="Send">
+    </form>
+    <a href="/logout">Logout</a>
+{% endblock %}
 
