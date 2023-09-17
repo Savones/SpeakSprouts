@@ -21,7 +21,8 @@ def open_register():
 @app.route("/open_new")
 def open_new():
     words = users.getUsernames(session["username"])
-    return render_template("new.html", items = words)
+    words2 = users.getUsernames(session["username"])
+    return render_template("new.html", items = words, also_items = words2)
 
 @app.route("/open_chat")
 def open_chat():

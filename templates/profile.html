@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="flex_container">
     {% if profile["username"] == session.username %}
         <h2>This is your profile!</h2 >
         <a href="/edit_profile">Edit profile</a>
@@ -13,4 +14,5 @@
         <li>Bio: {{ profile["bio"] }}</li>
         <li>Color: {{ profile["color"] }}</li>
     </ul>
+</div>
 {% endblock %}

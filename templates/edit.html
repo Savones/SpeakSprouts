@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="flex_container">
     <p>Edit profile here!</p>
     <form method="POST" action="/profile?username={{ session.username }}">
         <p>Your bio</p>
@@ -15,6 +16,7 @@
         </div>
         <input type="submit" value="Save">
     </form>
+</div>
 {% endblock %}
 
 {% block scirpt %}

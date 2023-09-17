@@ -1,31 +1,54 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div class="main_container">
-
-        <div class="chats_container">
-            <h2>Your chats</h2>
-            {% for item in items %}
-            <div class="user_links">
-                <h3>{{ item[0] }}</h3>
-                <a class="user_link" href="/open_chat?username={{ item[0] }}">Chat</a>
-                <a class="user_link profile_link" href="/profile?username={{ item[0] }}">Profile</a>
-            </div>
-            {% endfor %}
+<div class="main_container">
+    <div class="chats_container">
+        <h2>Your chats</h2>
+        {% for item in items %}
+        <div class="user_links">
+            <h3>{{ item[0] }}</h3>
+            <a class="user_link" href="/open_chat?username={{ item[0] }}">Chat</a>
+            <a class="user_link profile_link" href="/profile?username={{ item[0] }}">Profile</a>
         </div>
-
-        <div class="community_posts_container">
-            <h2>Community posts</h2>
-            <div>Post 1</div>
-            <div>Post 2</div>
-            <div>Post 3</div>
-        </div>
-
-        <div class="find_container">
-            <h2>Find language partners</h2>
-            <div>Find 1</div>
-            <div>Find 2</div>
-        </div>
-
+        {% endfor %}
     </div>
-    
+
+    <div class="community_posts_container">
+        <h2>Community posts</h2>
+        <div>Post 1</div>
+        <div>Post 2</div>
+        <div>Post 3</div>
+    </div>
+
+    <div class="find_container">
+        <h2>Find language partners</h2>
+        <input class="search_bar" type="search" placeholder="Search">
+        {% for thing in also_items %}
+        <div class="user_links">
+            <h3>{{ thing[0] }}</h3>
+            <a onclick="openRequestForm(`{{ thing[0] }}`)" class="request_link">Send request</a>
+            <a class="user_link profile_link" href="/profile?username={{ thing[0] }}">Profile</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<form id="request_form" class="hidden">
+    <textarea type="text" name="message" placeholder="Write a message"></textarea>
+    <a href="/open_new?username={{ session.username }}">Cancel</a>
+    <input type="submit" value="Send request">
+</form>
+{% endblock %}
+
+{% block scirpt %}
+<script>
+    function openRequestForm(username) {
+        const requestContainer = document.getElementById('request_form');
+        requestContainer.classList.add('request_form');
+        requestContainer.innerHTML = 
+        `<h2>Send a request to become language partners with ${username}</h2>
+        <textarea type="text" name="message" placeholder="Write a message"></textarea>
+        <a href="/open_new?username={{ session.username }}">Cancel</a>
+        <input type="submit" value="Send request">`;
+    }
+</script>
 {% endblock %}

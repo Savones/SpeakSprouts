@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="flex_container">
     <h2>Chat with {{ other_chatter }}</h2>
     <div class="messages_container">
         {% for message in messages %}
@@ -14,5 +15,6 @@
         <textarea type="text" name="message"></textarea><br>
         <input type="submit" value="Send">
     </form>
+</div>
 {% endblock %}
 

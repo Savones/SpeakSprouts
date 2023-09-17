@@ -9,6 +9,7 @@
     <body>
         <nav>
             {% block buttons %}
+            <a href="/open_new?username={{ session.username }}">Home</a>
             <a href="/profile?username={{ session.username }}">My profile</a>
             <a href="/logout">Logout</a>
             {% endblock %}
