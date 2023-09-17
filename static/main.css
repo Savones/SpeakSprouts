@@ -1,12 +1,56 @@
 body {
     margin: 0px;
-    margin-top: 200px;
-    background-color: rgb(62, 120, 101);
+    margin-top: 100px;
+    background-color: rgb(255, 255, 255);
     display: flex;
     justify-content: center;
     align-items: center;
+    color: rgb(62, 120, 101);
+}
+
+nav {
+    display: flex;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    background-color: rgb(62, 120, 101);
+    justify-content: flex-end;
+}
+
+.main_container {
+    border: 2px solid red;
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.chats_container {
+    display: flex;
+    align-items: center;
     flex-direction: column;
-    color: rgb(255, 255, 255);
+    border: 2px solid rgb(8, 63, 183);
+    width: 300px;
+}
+
+.community_posts_container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border: 2px solid rgb(47, 201, 33);
+    width: 400px;
+}
+
+.find_container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border: 2px solid rgb(243, 232, 19);
+    width: 300px;
+}
+
+.chats_container div, .find_container div, .community_posts_container div {
+    border: 2px solid black;
+    width: 250px;
 }
 
 .hidden {
@@ -23,7 +67,7 @@ form {
 a {
     text-decoration: none;
     border-style: none;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(239, 255, 181);
     padding: 10px;
     font-size: 16px;
     border-radius: 4px;
@@ -51,11 +95,11 @@ ul {
 
 .user_links {
     display: flex;
+    justify-content: space-evenly;
 }
 
 .user_link {
-    width: 75px;
-    margin: 5px;
+    width: min-content;
 }
 
 .profile_link {

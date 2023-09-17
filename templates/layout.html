@@ -7,6 +7,12 @@
         <link rel="stylesheet" href="static/main.css">
     </head>
     <body>
+        <nav>
+            {% block buttons %}
+            <a href="/profile?username={{ session.username }}">My profile</a>
+            <a href="/logout">Logout</a>
+            {% endblock %}
+        </nav>
         {% block content %}{% endblock %}
     </body>
     {% block scirpt %}{% endblock %}
