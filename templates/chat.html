@@ -2,19 +2,39 @@
 {% block content %}
 <div class="flex_container">
     <h2>Chat with {{ other_chatter }}</h2>
-    <div class="messages_container">
+    <div class="messages_container" id="messagesContainer">
+        {% set previous_date = None %}
         {% for message in messages %}
+            {% if message[2].date() != previous_date %}
+                <p class="date_header">{{ message[2].strftime('%Y-%m-%d') }}</p>
+                {% set previous_date = message[2].date() %}
+            {% endif %}
             {% if message[1] == sender %}
-                <div class="single_message sender_message"> {{ message[0] }} </div>
+                <div class="single_message sender_message">
+                    <p>{{ message[0] }}</p>
+                    <p>{{ message[2].strftime('%H:%M') }}</p>
+                </div>
             {% else %}
-                <div class="single_message receiver_message"> {{ message[0] }} </div>
+                <div class="single_message receiver_message">
+                    <p>{{ message[0] }}</p>
+                    <p>{{ message[2].strftime('%H:%M') }}</p>
+                </div>
             {% endif %}
         {% endfor %}
     </div>
+    
     <form class="chat_form" method="POST" action="/chat?username={{ other_chatter }}">
         <textarea type="text" name="message"></textarea><br>
         <input type="submit" value="Send">
     </form>
 </div>
+{% endblock %}
+
+{% block scirpt %}
+<script>
+    var messagesContainer = document.getElementById("messagesContainer");
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+</script>
 {% endblock %}
 

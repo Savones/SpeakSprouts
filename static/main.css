@@ -154,9 +154,15 @@ textarea {
     width: 350px;
     display: flex;
     flex-direction: column;
+    height: 600px;
+    border-top: 1px solid rgb(178, 178, 178);
+    border-bottom: 1px solid rgb(178, 178, 178);
+    overflow-y: auto;
 }
 
 .single_message {
+    display: flex;
+    justify-content: space-between;
     background-color: rgb(196, 245, 229);
     color: black;
     padding: 20px;
