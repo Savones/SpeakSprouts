@@ -163,19 +163,22 @@ textarea {
 .single_message {
     display: flex;
     justify-content: space-between;
-    background-color: rgb(196, 245, 229);
+    background-color: rgb(203, 244, 230);
     color: black;
-    padding: 20px;
     margin: 10px;
     width: 200px;
 }
 
 .sender_message {
     align-self: flex-end;
+    border-radius: 40px 40px 0px 40px;
+    padding: 20px;
 }
 
 .receiver_message {
-    background-color: rgb(255, 168, 168);
+    background-color: rgb(255, 188, 188);
+    border-radius: 40px 40px 40px 0px;
+    padding: 20px;
 }
 
 .languages_container {
@@ -197,4 +200,11 @@ textarea {
     width: 500px;
     height: 500px;
     color: rgb(255, 255, 255);
+}
+
+.timestamp {
+    align-self: flex-end;
+    margin-left: 5px;
+    color: rgb(105, 105, 105);
+    font-size: 14px;
 }

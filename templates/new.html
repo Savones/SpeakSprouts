@@ -45,7 +45,7 @@
         const requestContainer = document.getElementById('request_form');
         requestContainer.classList.add('request_form');
         requestContainer.innerHTML = 
-        `<h2>Send a request to become language partners with ${username}</h2>
+        `<h2>Language partner request to ${username}</h2>
         <textarea type="text" name="message" placeholder="Write a message"></textarea>
         <a href="/open_new?username={{ session.username }}">Cancel</a>
         <input type="submit" value="Send request">`;
