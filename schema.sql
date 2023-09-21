@@ -34,3 +34,11 @@ CREATE TABLE profiles (
     bio TEXT,
     profile_color VARCHAR(7)
 );
+
+CREATE TABLE language_partners (
+    id SERIAL PRIMARY KEY,
+    user_id1 INT NOT NULL,
+    user_id2 INT NOT NULL,
+    request_status VARCHAR(20),
+    request_message TEXT
+);

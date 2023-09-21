@@ -5,6 +5,7 @@ import messages
 import profiles
 import db
 import json
+import partners
 
 @app.route("/")
 def index():
@@ -82,6 +83,11 @@ def edit_profile():
     profile_info = profiles.get_profile(session["username"])
     languages = db.get_languages()
     return render_template("edit.html", profile = profile_info, languages = languages)
+
+@app.route("/sent_request", methods=["GET", "POST"])
+def sent_request():
+    partners.request_sent(1, 2)
+    return redirect("/open_new")
 
 # For security
 

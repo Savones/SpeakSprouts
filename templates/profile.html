@@ -6,6 +6,7 @@
         <a href="/edit_profile">Edit profile</a>
     {% else %}
         <h2>{{ profile["username"] }}'s profile</h2 >
+        <a onclick="openRequestForm(`{{ profile['username'] }}`)" class="request_link">Send request</a>
     {% endif %}
     <ul>
         <li>Username: {{ profile["username"] }}</li>
@@ -15,4 +16,20 @@
         <li>Color: {{ profile["color"] }}</li>
     </ul>
 </div>
+
+<form action="/sent_request" method="POST" id="request_form" class="hidden"></form>
+{% endblock %}
+
+{% block scirpt %}
+<script>
+    function openRequestForm(username) {
+        const requestContainer = document.getElementById('request_form');
+        requestContainer.classList.add('request_form');
+        requestContainer.innerHTML = 
+        `<h2>Language partner request to ${username}</h2>
+        <textarea type="text" name="message" placeholder="Write a message"></textarea>
+        <a href="/profile?username={{ profile['username'] }}">Cancel</a>
+        <input type="submit" value="Send request">`;
+    }
+</script>
 {% endblock %}

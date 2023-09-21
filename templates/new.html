@@ -25,30 +25,9 @@
         {% for thing in also_items %}
         <div class="user_links">
             <h3>{{ thing[0] }}</h3>
-            <a onclick="openRequestForm(`{{ thing[0] }}`)" class="request_link">Send request</a>
             <a class="user_link profile_link" href="/profile?username={{ thing[0] }}">Profile</a>
         </div>
         {% endfor %}
     </div>
 </div>
-
-<form id="request_form" class="hidden">
-    <textarea type="text" name="message" placeholder="Write a message"></textarea>
-    <a href="/open_new?username={{ session.username }}">Cancel</a>
-    <input type="submit" value="Send request">
-</form>
-{% endblock %}
-
-{% block scirpt %}
-<script>
-    function openRequestForm(username) {
-        const requestContainer = document.getElementById('request_form');
-        requestContainer.classList.add('request_form');
-        requestContainer.innerHTML = 
-        `<h2>Language partner request to ${username}</h2>
-        <textarea type="text" name="message" placeholder="Write a message"></textarea>
-        <a href="/open_new?username={{ session.username }}">Cancel</a>
-        <input type="submit" value="Send request">`;
-    }
-</script>
 {% endblock %}
