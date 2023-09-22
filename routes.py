@@ -21,8 +21,8 @@ def open_register():
 
 @app.route("/open_new")
 def open_new():
-    words = users.getUsernames(session["username"])
-    words2 = users.getUsernames(session["username"])
+    words = partners.get_partners(session["username"])
+    words2 = partners.get_non_partners(session["username"])
     return render_template("new.html", items = words, also_items = words2)
 
 @app.route("/open_chat")
@@ -67,7 +67,8 @@ def profile():
     if request.method == "GET":
         session["profile_username"] = request.args.get("username")
         profile_info = profiles.get_profile(session["profile_username"])
-        return render_template("profile.html", profile=profile_info)
+        result = partners.check_partner(session["username"], session["profile_username"])
+        return render_template("profile.html", profile=profile_info, partner = result)
     elif request.method == "POST":
         updated_profile = {}
         for key, value in request.form.items():

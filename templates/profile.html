@@ -6,7 +6,11 @@
         <a href="/edit_profile">Edit profile</a>
     {% else %}
         <h2>{{ profile["username"] }}'s profile</h2 >
-        <a onclick="openRequestForm(`{{ profile['username'] }}`)" class="request_link">Send request</a>
+        {% if partner == False %}
+            <a onclick="openRequestForm(`{{ profile['username'] }}`)" class="request_link">Send request</a>
+        {% else %}
+            <p>You are language partners!</p>
+        {% endif %}
     {% endif %}
     <ul>
         <li>Username: {{ profile["username"] }}</li>

@@ -73,4 +73,42 @@ def change_status(username, user_id2, answer):
     
     db.session.commit()
 
+def get_partners(username):
+    user_id_query = text("SELECT id FROM users WHERE username = :username")
+    user_id = db.session.execute(user_id_query, {"username": username}).scalar()
 
+    if user_id is None:
+        return []
+
+    partners_query = text(
+        "SELECT u.username, lp.request_status, lp.request_message "
+        "FROM language_partners lp "
+        "JOIN users u ON lp.user_id1 = u.id "
+        "WHERE lp.user_id2 = :user_id AND lp.request_status='Accepted'"
+    )
+    language_partners = db.session.execute(partners_query, {"user_id": user_id}).fetchall()
+
+    return language_partners
+
+def check_partner(username, check_username):
+    result = get_partners(username)
+    for user in result:
+        if user[0] == check_username:
+            return True
+    return False
+
+def get_non_partners(username):
+    user_id_query = text("SELECT id FROM users WHERE username = :username")
+    user_id = db.session.execute(user_id_query, {"username": username}).scalar()
+
+    if user_id is None:
+        return []
+
+    non_partners_query = text(
+        "SELECT username FROM users WHERE id NOT IN "
+        "(SELECT user_id1 FROM language_partners WHERE user_id2 = :user_id) "
+        "AND id != :user_id"
+    )
+    non_partners = db.session.execute(non_partners_query, {"user_id": user_id}).fetchall()
+
+    return non_partners
