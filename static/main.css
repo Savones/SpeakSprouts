@@ -216,7 +216,7 @@ textarea {
 }
 
 .notif_container {
-    background-color: rgb(255, 222, 252);
+    border: 1px solid black;
     display: flex;
     padding: 10px;
     gap: 20px;

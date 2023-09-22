@@ -26,10 +26,10 @@
         const requestContainer = document.getElementById('request_form');
         requestContainer.classList.add('request_form');
         requestContainer.innerHTML = 
-        `<h2>Language partner request to ${username}</h2>
-        <textarea type="text" name="message" placeholder="Write a message"></textarea>
-        <a href="/profile?username={{ profile['username'] }}">Cancel</a>
-        <input type="submit" value="Send request">`;
+            `<h2>Language partner request to ${username}</h2>
+            <textarea type="text" name="message" placeholder="Write a message" form="request_form"></textarea>
+            <a href="/profile?username={{ profile['username'] }}">Cancel</a>
+            <input type="submit" value="Send request" form="request_form">`;
     }
 </script>
 {% endblock %}

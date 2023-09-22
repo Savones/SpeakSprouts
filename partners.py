@@ -1,7 +1,7 @@
 from db import db
 from sqlalchemy.sql import text
 
-def request_sent(sender_name, receiver_name):
+def request_sent(sender_name, receiver_name, message):
 
     sender_id_query = text("SELECT id FROM users WHERE username = :username")
     receiver_id_query = text("SELECT id FROM users WHERE username = :username")
@@ -18,11 +18,17 @@ def request_sent(sender_name, receiver_name):
     ).scalar()
 
     if partner_id is None:
-        add_request(sender_id, receiver_id)
+        add_request(sender_id, receiver_id, message)
+    else:
+        update_status_query = text(
+            "UPDATE language_partners SET request_status = 'Pending', request_message = :message WHERE id = :partner_id"
+        )
+        db.session.execute(
+            update_status_query, {"partner_id": partner_id, "message": message}
+        )
+        db.session.commit()
 
-def add_request(sender_id, receiver_id):
-
-    message = "Testi"
+def add_request(sender_id, receiver_id, message):
     status = "Pending"
 
     insert_partner = text(
@@ -39,17 +45,32 @@ def get_requests(username):
     id_query = text("SELECT id FROM users WHERE username = :username")
     id = db.session.execute(id_query, {"username": username}).scalar()
 
-    # notifs_query = text("SELECT user_id1, request_message FROM language_partners WHERE user_id2 = :user_id2")
-    
     notifs_query = text(
         "SELECT lp.user_id1, u.username, lp.request_message "
         "FROM language_partners lp "
         "JOIN users u ON lp.user_id1 = u.id "
-        "WHERE lp.user_id2 = :user_id2"
+        "WHERE lp.request_status = :status AND lp.user_id2 = :user_id2"
     )
     
-    notifs = db.session.execute(notifs_query, {"user_id2": id}).fetchall()
-
-    print(notifs)
-
+    notifs = db.session.execute(notifs_query, {"user_id2": id, "status": "Pending"}).fetchall()
     return notifs
+
+def change_status(username, user_id2, answer):
+    id_query = text("SELECT id FROM users WHERE username = :username")
+    user_id1 = db.session.execute(id_query, {"username": username}).scalar()
+
+    if answer == "accepted":
+        update_query = text(
+            "UPDATE language_partners SET request_status = 'Accepted' WHERE (user_id1 = :user_id1 AND user_id2 = :user_id2) OR (user_id1 = :user_id2 AND user_id2 = :user_id1)"
+        )
+        db.session.execute(update_query, {"user_id1": user_id1, "user_id2": user_id2})
+    
+    else:
+        update_query = text(
+            "UPDATE language_partners SET request_status = 'Rejected' WHERE (user_id1 = :user_id1 AND user_id2 = :user_id2) OR (user_id1 = :user_id2 AND user_id2 = :user_id1)"
+        )
+        db.session.execute(update_query, {"user_id1": user_id1, "user_id2": user_id2})
+    
+    db.session.commit()
+
+

@@ -2,10 +2,14 @@
 {% block content %}
 
 <div class="notifs_view">
+    <h2>Your notifications</h2>
+    <h3>Language partner requests:</h3>
     {% for notif in notifs %}
     <div class="notif_container">
-        <p>{{ notif[1] }}</p>
+        <p>{{ notif[1] }} sent a message:</p>
         <p>{{ notif[2] }}</p>
+        <a href="/request_answer?answer=rejected&id={{ notif[0] }}" class="user_link profile_link">Deny</a>
+        <a href="/request_answer?answer=accepted&id={{ notif[0] }}" class="user_link">Accept</a>
     </div>
     {% endfor %}
 </div>

@@ -87,13 +87,21 @@ def edit_profile():
 
 @app.route("/sent_request", methods=["GET", "POST"])
 def sent_request():
-    partners.request_sent(session["username"], session["profile_username"])
+    message = request.form.get("message")
+    partners.request_sent(session["username"], session["profile_username"], message)
     return redirect("/open_new")
 
 @app.route("/notifs")
 def notifs():
     notifs = partners.get_requests(session["username"])
     return render_template("notifs.html", notifs = notifs)
+
+@app.route("/request_answer")
+def request_answer():
+    answer = request.args.get("answer")
+    user_id = request.args.get("id")
+    partners.change_status(session["username"], user_id, answer)
+    return redirect("/notifs")
 
 # For security
 
