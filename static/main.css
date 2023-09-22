@@ -208,3 +208,16 @@ textarea {
     color: rgb(105, 105, 105);
     font-size: 14px;
 }
+
+.notifs_view {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.notif_container {
+    background-color: rgb(255, 222, 252);
+    display: flex;
+    padding: 10px;
+    gap: 20px;
+}

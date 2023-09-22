@@ -65,7 +65,8 @@ def chat():
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
     if request.method == "GET":
-        profile_info = profiles.get_profile(request.args.get("username"))
+        session["profile_username"] = request.args.get("username")
+        profile_info = profiles.get_profile(session["profile_username"])
         return render_template("profile.html", profile=profile_info)
     elif request.method == "POST":
         updated_profile = {}
@@ -86,8 +87,13 @@ def edit_profile():
 
 @app.route("/sent_request", methods=["GET", "POST"])
 def sent_request():
-    partners.request_sent(1, 2)
+    partners.request_sent(session["username"], session["profile_username"])
     return redirect("/open_new")
+
+@app.route("/notifs")
+def notifs():
+    notifs = partners.get_requests(session["username"])
+    return render_template("notifs.html", notifs = notifs)
 
 # For security
 

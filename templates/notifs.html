@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="notifs_view">
+    {% for notif in notifs %}
+    <div class="notif_container">
+        <p>{{ notif[1] }}</p>
+        <p>{{ notif[2] }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
