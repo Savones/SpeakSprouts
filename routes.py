@@ -6,9 +6,12 @@ import profiles
 import db
 import json
 import partners
+import testing
 
 @app.route("/")
 def index():
+    db.read_json()
+    testing.create_dummy_users()
     return render_template("index.html")
 
 @app.route("/open_login")

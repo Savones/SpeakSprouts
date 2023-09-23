@@ -58,19 +58,29 @@ def get_requests(username):
 def change_status(username, user_id2, answer):
     id_query = text("SELECT id FROM users WHERE username = :username")
     user_id1 = db.session.execute(id_query, {"username": username}).scalar()
+    exists_query = text(
+        "SELECT EXISTS (SELECT 1 FROM language_partners WHERE (user_id1 = :user_id1 AND user_id2 = :user_id2))"
+    )
+    row_exists = db.session.execute(exists_query, {"user_id1": user_id1, "user_id2": user_id2}).scalar()
 
-    if answer == "accepted":
-        update_query = text(
-            "UPDATE language_partners SET request_status = 'Accepted' WHERE (user_id1 = :user_id1 AND user_id2 = :user_id2) OR (user_id1 = :user_id2 AND user_id2 = :user_id1)"
+    if not row_exists:
+        status = "Accepted" if answer == "accepted" else "Rejected"
+        insert_query = text(
+            "INSERT INTO language_partners (user_id1, user_id2, request_status, request_message) VALUES (:user_id1, :user_id2, :status, '')"
         )
-        db.session.execute(update_query, {"user_id1": user_id1, "user_id2": user_id2})
-    
+        db.session.execute(insert_query, {"user_id1": user_id1, "user_id2": user_id2, "status": status})
     else:
+        status = "Accepted" if answer == "accepted" else "Rejected"
         update_query = text(
-            "UPDATE language_partners SET request_status = 'Rejected' WHERE (user_id1 = :user_id1 AND user_id2 = :user_id2) OR (user_id1 = :user_id2 AND user_id2 = :user_id1)"
+            "UPDATE language_partners SET request_status = :status WHERE (user_id1 = :user_id1 AND user_id2 = :user_id2) OR (user_id1 = :user_id2 AND user_id2 = :user_id1)"
         )
-        db.session.execute(update_query, {"user_id1": user_id1, "user_id2": user_id2})
-    
+        db.session.execute(update_query, {"user_id1": user_id1, "user_id2": user_id2, "status": status})
+
+    update_query = text(
+            "UPDATE language_partners SET request_status = :status WHERE (user_id1 = :user_id1 AND user_id2 = :user_id2) OR (user_id1 = :user_id2 AND user_id2 = :user_id1)"
+        )
+    db.session.execute(update_query, {"user_id1": user_id2, "user_id2": user_id1, "status": status})
+
     db.session.commit()
 
 def get_partners(username):
