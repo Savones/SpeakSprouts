@@ -51,7 +51,17 @@ Functionalities for users:
 - not done
 
 
-## Introductions for testing
+## Instructions for testing
+
+### Recommendations for testing
+
+For testing purposes I have added 10 dummy users to the database when the program is first ran.
+I recommend that you first register a new account and then send a language partner
+request to a dummy user by going to their profile. Then logout and login to that dummy account (username and password are the same)
+ and accept the partner request by going to the notifications (bell icon in top-right).
+By doing this you can test the chatting feature, since chatting is only possible with language partners.
+
+### Commands
 
 Run the following commands to set up:
 ```
