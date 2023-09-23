@@ -2,6 +2,7 @@
 
 A platform for language learners to connect with each other and practice languages by chatting. Users can create profiles and find language partners.
 
+
 ## Requirements for the finished project
 
 ### Profiles
@@ -20,6 +21,7 @@ Functionalities for users:
 - user can block another user
 - user can add a review on a language partners profile
 - user can make community posts and comment or like other peoples posts
+
 
 ## Current functionalities
 
@@ -48,13 +50,20 @@ Functionalities for users:
 
 - not done
 
+
 ## Introductions for testing
 
 Run the following commands to set up:
 ```
 python3 -m venv venv
+```
+```
 source venv/bin/activate
+```
+```
 pip install -r ./requirements.txt
+```
+```
 psql < schema.sql
 ```
 Run the program with:
