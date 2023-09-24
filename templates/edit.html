@@ -5,7 +5,7 @@
     <form method="POST" action="/profile?username={{ session.username }}">
         <p>Your bio</p>
         <textarea type="text" name="bio"></textarea><br>
-        <button type="button" onclick="openLanguageSelection()">Add language</button>
+        <button class="button" type="button" onclick="openLanguageSelection()">Add language</button>
         <div id="languages_selection" class="hidden">
             {% for item in languages %}
             <div class="language_box">
@@ -14,7 +14,7 @@
             </div>
             {% endfor %}
         </div>
-        <input type="submit" value="Save">
+        <input type="submit" value="Save" class="button">
     </form>
 </div>
 {% endblock %}

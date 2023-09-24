@@ -3,11 +3,11 @@
 <div class="flex_container">
     {% if profile["username"] == session.username %}
         <h2>This is your profile!</h2 >
-        <a href="/edit_profile">Edit profile</a>
+        <a href="/edit_profile" class="button">Edit profile</a>
     {% else %}
         <h2>{{ profile["username"] }}'s profile</h2 >
         {% if partner == False %}
-            <a onclick="openRequestForm(`{{ profile['username'] }}`)" class="request_link">Send request</a>
+            <a onclick="openRequestForm(`{{ profile['username'] }}`)" class="button">Send request</a>
         {% else %}
             <p>You are language partners!</p>
         {% endif %}
@@ -32,8 +32,8 @@
         requestContainer.innerHTML = 
             `<h2>Language partner request to ${username}</h2>
             <textarea type="text" name="message" placeholder="Write a message" form="request_form"></textarea>
-            <a href="/profile?username={{ profile['username'] }}">Cancel</a>
-            <input type="submit" value="Send request" form="request_form">`;
+            <a href="/profile?username={{ profile['username'] }}" class="button">Cancel</a>
+            <input type="submit" value="Send request" class="button" form="request_form">`;
     }
 </script>
 {% endblock %}

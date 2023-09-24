@@ -5,14 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>SpeakSprouts</title>
         <link rel="stylesheet" href="static/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     </head>
     <body>
         <nav>
             {% block buttons %}
-            <a href="/open_new?username={{ session.username }}">Home</a>
-            <a href="/profile?username={{ session.username }}">My profile</a>
-            <a href="/notifs?username={{ session.username }}">Notifs</a>
-            <a href="/logout">Logout</a>
+            <a href="/open_new?username={{ session.username }}"><i class="fa fa-home "></i></a>
+            <a href="/profile?username={{ session.username }}"><i class="fa fa-user "></i></a>
+            <a href="/notifs?username={{ session.username }}"><i class="fa fa-bell "></i></a>
+            <a href="/logout"><i class="fas fa-sign-out-alt"></i></a>
             {% endblock %}
         </nav>
         {% block content %}{% endblock %}

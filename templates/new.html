@@ -4,10 +4,15 @@
     <div class="chats_container">
         <h2>Your chats</h2>
         {% for item in items %}
-        <div class="user_links">
-            <h3>{{ item[0] }}</h3>
-            <a class="user_link" href="/open_chat?username={{ item[0] }}">Chat</a>
-            <a class="user_link profile_link" href="/profile?username={{ item[0] }}">Profile</a>
+        <div class="chat_box">
+            <div class="user_links">
+                <h3 class="username">{{ item[0] }}</h3>
+                <a href="/profile?username={{ item[0] }}"><i class="fa fa-user icon"></i></a>
+            </div>
+            <div class="user_links">
+                <p class="latest_message">The last sent message is here.</p>
+                <a href="/open_chat?username={{ item[0] }}"><i class="fa fa-comments icon"></i></a>
+            </div>
         </div>
         {% endfor %}
     </div>
@@ -23,9 +28,9 @@
         <h2>Find language partners</h2>
         <input class="search_bar" type="search" placeholder="Search">
         {% for thing in also_items %}
-        <div class="user_links">
-            <h3>{{ thing[0] }}</h3>
-            <a class="user_link profile_link" href="/profile?username={{ thing[0] }}">Profile</a>
+        <div class="user_links brown">
+            <h3 class="username">{{ thing[0] }}</h3>
+            <a href="/profile?username={{ thing[0] }}"><i class="fa fa-user icon"></i></a>
         </div>
         {% endfor %}
     </div>
