@@ -53,6 +53,13 @@ Functionalities for users:
 
 ## Instructions for testing
 
+After cloning this repo to your device, create an .env file to the root folder.
+The .env file should have the following content.
+```
+DATABASE_URL=<databases-local-address>
+SECRET_KEY=<your-secret-key>
+```
+
 ### Recommendations for testing
 
 For testing purposes I have added 10 dummy users to the database when the program is first ran.
