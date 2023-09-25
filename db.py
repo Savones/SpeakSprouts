@@ -13,14 +13,21 @@ def read_json():
     with open('datasets/languages.json', 'r') as file:
         data = json.load(file)
 
-    for item in data:
-        language_name = item['name']
-        native_name = item['native']
-        iso_639_1_code = item['code']
-        sql = text(
-            "INSERT INTO languages (language_name, native_name, iso_639_1_code) VALUES (:language_name, :native_name, :iso_639_1_code)"
-        )
-        db.session.execute(sql, {"language_name":language_name, "native_name":native_name, "iso_639_1_code":iso_639_1_code})
+    sql = text(
+                "SELECT * FROM languages"
+            )
+    result = db.session.execute(sql).scalar()
+    
+    if not result:
+        print("no data")
+        for item in data:
+            language_name = item['name']
+            native_name = item['native']
+            iso_639_1_code = item['code']
+            sql = text(
+                "INSERT INTO languages (language_name, native_name, iso_639_1_code) VALUES (:language_name, :native_name, :iso_639_1_code)"
+            )
+            db.session.execute(sql, {"language_name":language_name, "native_name":native_name, "iso_639_1_code":iso_639_1_code})
     db.session.commit()
         
 def get_languages():
