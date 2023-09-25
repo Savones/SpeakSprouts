@@ -1,4 +1,5 @@
 from db import db
+import messages
 from sqlalchemy.sql import text
 
 def request_sent(sender_name, receiver_name, message):
@@ -83,6 +84,12 @@ def change_status(username, user_id2, answer):
 
     db.session.commit()
 
+    name_query = text("SELECT username FROM users WHERE id = :id")
+    username2 = db.session.execute(name_query, {"id": user_id2}).scalar()
+
+    if answer == 'accepted':
+        messages.get_chat_id(username, username2)
+
 def get_partners(username):
     user_id_query = text("SELECT id FROM users WHERE username = :username")
     user_id = db.session.execute(user_id_query, {"username": username}).scalar()
@@ -91,12 +98,12 @@ def get_partners(username):
         return []
 
     partners_query = text(
-    "SELECT u.username, c.id "
-    "FROM language_partners lp "
-    "JOIN users u ON lp.user_id1 = u.id "
-    "JOIN chats c ON (lp.user_id1 = c.user1_id AND lp.user_id2 = c.user2_id) OR (lp.user_id1 = c.user2_id AND lp.user_id2 = c.user1_id) "
-    "WHERE lp.user_id2 = :user_id AND lp.request_status = 'Accepted'"
-)
+        "SELECT u.username, c.id "
+        "FROM language_partners lp "
+        "JOIN users u ON lp.user_id1 = u.id "
+        "JOIN chats c ON (lp.user_id1 = c.user1_id AND lp.user_id2 = c.user2_id) OR (lp.user_id1 = c.user2_id AND lp.user_id2 = c.user1_id) "
+        "WHERE lp.user_id2 = :user_id AND lp.request_status = 'Accepted'"
+    )
     language_partners = db.session.execute(partners_query, {"user_id": user_id}).fetchall()
 
     return language_partners

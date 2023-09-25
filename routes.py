@@ -70,9 +70,9 @@ def chat():
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
+    session["profile_username"] = request.args.get("username")
+    profile_info = profiles.get_profile(session["profile_username"])
     if request.method == "GET":
-        session["profile_username"] = request.args.get("username")
-        profile_info = profiles.get_profile(session["profile_username"])
         result = partners.check_partner(session["username"], session["profile_username"])
         return render_template("profile.html", profile=profile_info, partner = result)
     elif request.method == "POST":
@@ -82,7 +82,6 @@ def profile():
                 updated_profile[key] = json.dumps(request.form.getlist("languages_known"))
             else:
                 updated_profile[key] = value
-        print(updated_profile)
         profiles.update_profile(session["username"], updated_profile)
         return redirect("/profile?username=" + session["username"])
 
