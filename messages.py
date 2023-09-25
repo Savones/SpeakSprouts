@@ -61,3 +61,19 @@ def get_messages(chat_id, username):
     messages_query = text("SELECT message_text, sender_id, timestamp FROM messages WHERE chat_id = :chat_id")
     messages = db.session.execute(messages_query, {"chat_id": chat_id})
     return messages, sender_id
+
+def get_latest_messages(chat_ids):
+
+    latest_messages = []
+    for chat_id in chat_ids:
+        latest_message_query = text(
+            "SELECT message_text "
+            "FROM messages "
+            "WHERE chat_id = :chat_id "
+            "ORDER BY timestamp DESC "
+            "LIMIT 1"
+        )
+        latest_message = db.session.execute(latest_message_query, {"chat_id": chat_id}).scalar()
+        latest_messages.append(latest_message)
+
+    return latest_messages

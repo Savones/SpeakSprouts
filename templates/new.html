@@ -6,12 +6,12 @@
         {% for item in items %}
         <div class="chat_box">
             <div class="user_links">
-                <h3 class="username">{{ item[0] }}</h3>
-                <a href="/profile?username={{ item[0] }}"><i class="fa fa-user icon"></i></a>
+                <h3 class="username">{{ item[0][0] }}</h3>
+                <a href="/profile?username={{ item[0][0] }}"><i class="fa fa-user icon"></i></a>
             </div>
-            <div class="user_links">
-                <p class="latest_message">The last sent message is here.</p>
-                <a href="/open_chat?username={{ item[0] }}"><i class="fa fa-comments icon"></i></a>
+            <div class="user_links last_text">
+                <p class="latest_message">{{ item[1] }}</p>
+                <a href="/open_chat?username={{ item[0][0] }}"><i class="fa fa-comments icon blue"></i></a>
             </div>
         </div>
         {% endfor %}

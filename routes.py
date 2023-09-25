@@ -24,9 +24,12 @@ def open_register():
 
 @app.route("/open_new")
 def open_new():
-    words = partners.get_partners(session["username"])
+    partners_info = partners.get_partners(session["username"])
+    partners_chat_ids = [id[1] for id in partners_info]
+    latest_messages = messages.get_latest_messages(partners_chat_ids)
+    stuff = [(partner, latest_messages[i]) for i, partner in enumerate(partners_info)]
     words2 = partners.get_non_partners(session["username"])
-    return render_template("new.html", items = words, also_items = words2)
+    return render_template("new.html", items = stuff, also_items = words2)
 
 @app.route("/open_chat")
 def open_chat():
