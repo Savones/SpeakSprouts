@@ -13,5 +13,5 @@ elif [ "$1" == "update" ]; then
 else
     source venv/bin/activate
     source .env
-    flask run --host=$HOST --port=$PORT
+    flask run --host=$HOST --port=$PORT --cert=$TLS_CERT --key=$TLS_KEY
 fi
