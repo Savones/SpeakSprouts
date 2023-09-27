@@ -1,0 +1,13 @@
+[Unit]
+Description=python webapp for hy-tkt/tsoha
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Restart=always
+RestartSec=10
+WorkingDirectory=%h/speak-sprouts
+ExecStart=%h/speak-sprouts/main.sh
+
+[Install]
+WantedBy=default.target

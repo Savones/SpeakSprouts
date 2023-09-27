@@ -1,0 +1,7 @@
+[Unit]
+Description=update to latest release on origin/main
+
+[Service]
+#Type=forking
+WorkingDirectory=%h/speak-sprouts
+ExecStart=%h/speak-sprouts/main.sh update
