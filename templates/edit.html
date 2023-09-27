@@ -4,16 +4,21 @@
     <p>Edit profile here!</p>
     <form method="POST" action="/profile?username={{ session.username }}">
         <p>Your bio</p>
-        <textarea type="text" name="bio"></textarea><br>
-        <button class="button" type="button" onclick="openLanguageSelection()">Add language</button>
+        <textarea type="text" name="bio">{{ profile["bio"] }}</textarea><br>
+        <button class="button" type="button" onclick="openLanguageSelection()">Change language choices</button>
         <div id="languages_selection" class="hidden">
             {% for item in languages %}
-            <div class="language_box">
-                <input type="checkbox" name="languages_known" value="{{ item[0] }}">
-                <label>{{ item[0] }}</label><br>
-            </div>
+                <div class="language_box">
+                    {% if profile["languages"] is not none %}
+                    <input type="checkbox" name="languages_known" value="{{ item[0] }}" {% if item[0] in profile["languages"] %} checked {% endif %}>
+                    {% else %}
+                    <input type="checkbox" name="languages_known" value="{{ item[0] }}">
+                    {% endif %}
+                    <label>{{ item[0] }}</label><br>
+                </div>
             {% endfor %}
         </div>
+        <input type="hidden" name="languages_known" id="selectedLanguagesInput">
         <input type="submit" value="Save" class="button">
     </form>
 </div>
@@ -25,5 +30,23 @@
         const languagesContainer = document.getElementById('languages_selection');
         languagesContainer.classList.add('languages_container');
     }
+
+    document.querySelectorAll('input[name="languages_known"]').forEach((checkbox) => {
+    checkbox.addEventListener('change', function () {
+        const language = this.value;
+        
+        if (this.checked) {
+            selectedLanguages.push(language);
+        } else {
+            const index = selectedLanguages.indexOf(language);
+            if (index !== -1) {
+                selectedLanguages.splice(index, 1);
+            }
+        }
+        
+        document.getElementById('selectedLanguagesInput').value = JSON.stringify(selectedLanguages);
+    });
+});
+
 </script>
 {% endblock %}

@@ -1,24 +1,26 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="flex_container">
-    {% if profile["username"] == session.username %}
-        <h2>This is your profile!</h2 >
-        <a href="/edit_profile" class="button">Edit profile</a>
-    {% else %}
-        <h2>{{ profile["username"] }}'s profile</h2 >
-        {% if partner == False %}
-            <a onclick="openRequestForm(`{{ profile['username'] }}`)" class="button">Send request</a>
+<div>
+    <div class="flex_container profile_container">
+        <div class="profile_photo"></div>
+        <h2 class="margin">@{{ profile["username"] }}</h2 >
+        <p class="bio">{{ profile["bio"] }}</p>
+        {% if profile["username"] == session.username %}
+            <a href="/edit_profile" class="button">Edit profile</a>
         {% else %}
-            <p>You are language partners!</p>
+            {% if partner == False %}
+                <a onclick="openRequestForm(`{{ profile['username'] }}`)" class="button">Send request</a>
+            {% else %}
+            <a class="button" href="/open_chat?username={{ profile['username'] }}">Your chat</a>
+            {% endif %}
         {% endif %}
-    {% endif %}
-    <ul>
-        <li>Username: {{ profile["username"] }}</li>
-        <li>Languages: {{ profile["languages"] }}</li>
-        <li>Language levels: {{ profile["levels"] }}</li>
-        <li>Bio: {{ profile["bio"] }}</li>
-        <li>Color: {{ profile["color"] }}</li>
-    </ul>
+    </div>
+
+    <div class="flex_container profile_container">
+        <p>Languages: {{ profile["languages"] }}</p>
+        <p>Language levels: {{ profile["levels"] }}</p>
+        <p>Color: {{ profile["color"] }}</p>
+    </div>
 </div>
 
 <form action="/sent_request" method="POST" id="request_form" class="hidden"></form>
