@@ -2,12 +2,12 @@
 
 A platform for language learners to connect with each other and practice languages by chatting. Users can create profiles and find language partners.
 
-## Please note!
+### Please note
 The latest version of this app is running at a friends 
 server. And to automate the fetching I have merged his pull request. The merged 
 code only affects the automation and not the content of the app itself. 
 So please note that the merged files should not be part of my grading.
-This includes the systemd folder and the main.sh file.
+You can view all of these changes [here](https://github.com/Savones/SpeakSprouts/pull/1).
 
 ## Requirements for the finished project
 
