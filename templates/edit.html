@@ -10,11 +10,11 @@
             {% for item in languages %}
                 <div class="language_box">
                     {% if profile["languages"] is not none %}
-                    <input type="checkbox" name="languages_known" value="{{ item[0] }}" {% if item[0] in profile["languages"] %} checked {% endif %}>
+                    <input id="lang-{{ loop.index0 }}" type="checkbox" name="languages_known" value="{{ item[0] }}" {% if item[0] in profile["languages"] %} checked {% endif %}>
                     {% else %}
-                    <input type="checkbox" name="languages_known" value="{{ item[0] }}">
+                    <input id="lang-{{ loop.index0 }}" type="checkbox" name="languages_known" value="{{ item[0] }}">
                     {% endif %}
-                    <label>{{ item[0] }}</label><br>
+                    <label for="lang-{{ loop.index0 }}">{{ item[0] }}</label><br>
                 </div>
             {% endfor %}
         </div>
