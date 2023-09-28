@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, session, make_response, js
 import users
 import messages
 import profiles
+import posts
 import db
 import json
 import partners
@@ -29,7 +30,8 @@ def open_new():
     latest_messages = messages.get_latest_messages(partners_chat_ids)
     stuff = [(partner, latest_messages[i]) for i, partner in enumerate(partners_info)]
     words2 = partners.get_non_partners(session["username"])
-    return render_template("new.html", items = stuff, also_items = words2)
+    posts_info = posts.get_posts()
+    return render_template("new.html", items = stuff, also_items = words2, posts = posts_info)
 
 @app.route("/open_chat")
 def open_chat():
@@ -108,6 +110,30 @@ def request_answer():
     user_id = request.args.get("id")
     partners.change_status(session["username"], user_id, answer)
     return redirect("/notifs")
+
+@app.route("/open_post")
+def open_post():
+    post_id = request.args.get("id")
+    post_info = "None"
+    if post_id != "None":
+        post_info = posts.get_post_info(post_id)
+    return render_template("post.html", post = post_info)
+
+@app.route("/add_post", methods=["POST"])
+def add_post():
+    title = request.form.get("title")
+    author = session["username"]
+    content = request.form.get("content")
+    posts.add_post(author, title, content)
+    return redirect("/open_new")
+
+@app.route("/add_comment", methods=["POST"])
+def add_comment():
+    author = session["username"]
+    content = request.form.get("content")
+    posts.add_comment(author, content)
+    return redirect("/open_new")
+
 
 # For security
 

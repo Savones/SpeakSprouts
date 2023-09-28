@@ -42,3 +42,11 @@ CREATE TABLE language_partners (
     request_status VARCHAR(20),
     request_message TEXT
 );
+
+CREATE TABLE community_posts (
+    id serial PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    author_id INTEGER REFERENCES users(id) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);

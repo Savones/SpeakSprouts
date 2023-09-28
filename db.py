@@ -19,7 +19,6 @@ def read_json():
     result = db.session.execute(sql).scalar()
     
     if not result:
-        print("no data")
         for item in data:
             language_name = item['name']
             native_name = item['native']

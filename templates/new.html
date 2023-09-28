@@ -19,9 +19,16 @@
 
     <div class="community_posts_container">
         <h2>Community posts</h2>
-        <div>Post 1</div>
-        <div>Post 2</div>
-        <div>Post 3</div>
+        <a href="/open_post?id=None" class="button add_button">Add post</a>
+
+        {% for post in posts %}
+            <div class="post_container">
+                <p class="author">@{{ post.author_username }}</p>
+                <h3>{{ post.title }}</h3>
+                <p class="post_content">{{ post.content }}</p>
+                <a href="open_post?id={{ post.id }}" class="button">View post</a>
+            </div>
+        {% endfor %}
     </div>
 
     <div class="find_container">
