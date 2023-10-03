@@ -1,9 +1,9 @@
 from app import app
 from flask import render_template, request, redirect, session, make_response, jsonify, abort
-import users
-import messages
-import profiles
-import posts
+import services.users as users
+import services.messages as messages
+import services.profiles as profiles
+import services.posts as posts
 import db
 import json
 import partners

@@ -1,6 +1,6 @@
 from db import db
 from sqlalchemy.sql import text
-import users
+import services.users as users
 
 def create_dummy_users():
     sql = text("SELECT * FROM Users")

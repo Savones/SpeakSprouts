@@ -1,13 +1,11 @@
 from db import db
 from sqlalchemy.sql import text
 from datetime import datetime
+from services.mod import get_id 
 
 def get_chat_id(sender_name, receiver_name):
-    sender_id_query = text("SELECT id FROM users WHERE username = :username")
-    receiver_id_query = text("SELECT id FROM users WHERE username = :username")
-
-    sender_id = db.session.execute(sender_id_query, {"username": sender_name}).scalar()
-    receiver_id = db.session.execute(receiver_id_query, {"username": receiver_name}).scalar()
+    sender_id = get_id(sender_name)
+    receiver_id = get_id(receiver_name)
 
     # Ensures there is only one chat per pair
     if sender_id > receiver_id:
@@ -39,8 +37,7 @@ def get_chat_id(sender_name, receiver_name):
 
 def save_message(chat_id, sender_username, message):
 
-    sender_id_query = text("SELECT id FROM users WHERE username = :username")
-    sender_id = db.session.execute(sender_id_query, {"username": sender_username}).scalar()
+    sender_id = get_id(sender_username)
 
     timestamp = datetime.now()
 
@@ -55,8 +52,7 @@ def save_message(chat_id, sender_username, message):
     db.session.commit()
 
 def get_messages(chat_id, username):
-    sender_id_query = text("SELECT id FROM users WHERE username = :username")
-    sender_id = db.session.execute(sender_id_query, {"username": username}).scalar()
+    sender_id = get_id(username)
 
     messages_query = text("SELECT message_text, sender_id, timestamp FROM messages WHERE chat_id = :chat_id")
     messages = db.session.execute(messages_query, {"chat_id": chat_id})

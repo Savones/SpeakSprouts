@@ -1,6 +1,7 @@
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
 from db import db
+from services.mod import get_id 
 
 def login(username, password):
     sql = text("SELECT id, password FROM users WHERE username=:username")
@@ -31,12 +32,10 @@ def createUser(username, password):
     db.session.commit()
 
 def add_profile(username):
-    sql = text("SELECT id FROM users WHERE username=:username")
-    user_id = db.session.execute(sql, {"username":username}).fetchone()
+    user_id = get_id(username)
     sql = text("INSERT INTO profiles (username, user_id, languages_known, language_levels, bio, profile_color) VALUES (:username, :user_id, NULL, NULL, NULL, NULL)")
     db.session.execute(sql, {"username": username, "user_id": user_id[0]})
     db.session.commit()
-
 
 def getUsernames(username):
     sql = text("SELECT username FROM users WHERE username <> :username")
