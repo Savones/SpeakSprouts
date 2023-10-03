@@ -1,12 +1,31 @@
 {% extends "layout.html" %}
 {% block buttons %}{% endblock %}
 {% block content %}
-    <form action="/register" method="POST">
+    <form action="/register" method="POST" onsubmit="return checkPassword()">
         <h1>Register</h1>
         <p>Username:<br>
-        <input type="text" name="username"></p>
+        <input type="text" name="username" pattern="\w{3,12}" title="Username must be 3-12 characters and can only contain letters, numbers, and underscores." required>
         <p>Password:<br>
-        <input type="password" name="password"></p>
+        <input type="password" name="password" id="password" pattern=".{6,24}" title="Password must be 6-24 characters." required></p>
+        <p>Confirm password:<br>
+        <input type="password" name="confirm_password" id="confirm_password" pattern=".{6,24}" title="Password must be 6-24 characters." required></p>
         <input type="submit" value="Register" class="button">
     </form>
 {% endblock %}
+
+{% block scirpt %}
+<script>
+    function checkPassword(){
+        const password = document.getElementById('password').value;
+        const confirm_password = document.getElementById('confirm_password').value;
+        
+        if (password !== confirm_password) {
+            alert('The password confirmation does not match the given password.');
+            return false;
+        }
+        
+        return true;
+    }
+</script>
+{% endblock %}
+

@@ -6,8 +6,14 @@ import services.profiles as profiles
 import services.posts as posts
 import db
 import json
-import partners
+import services.partners as partners
 import testing
+import re
+
+re = {
+    'username': re.compile(r"\w{3,12}"),
+    'password': re.compile(r".{6,24}")
+}
 
 @app.route("/")
 def index():
@@ -55,6 +61,14 @@ def logout():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+
+    # Checks on server side that inputs are acceptable
+    global re
+    if not re["username"].match(request.form["username"]) \
+    or not re["password"].match(request.form["password"]) \
+    or not request.form["password"] == request.form["confirm_password"]:
+        return render_template("error.html")
+
     username = request.form["username"]
     password = request.form["password"]
     if users.register(username, password):
