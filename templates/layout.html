@@ -10,10 +10,13 @@
     <body>
         <nav>
             {% block buttons %}
-            <a href="/open_new?username={{ session.username }}"><i class="fa fa-home "></i></a>
-            <a href="/profile?username={{ session.username }}"><i class="fa fa-user "></i></a>
-            <a href="/notifs?username={{ session.username }}"><i class="fa fa-bell "></i></a>
-            <a href="/logout"><i class="fas fa-sign-out-alt"></i></a>
+            <h3 class="nav_logo">SpeakSprouts</h3>
+            <li>
+                <a href="/open_new?username={{ session.username }}"><i class="fa fa-home "></i></a>
+                <a href="/profile?username={{ session.username }}"><i class="fa fa-user "></i></a>
+                <a href="/notifications?username={{ session.username }}"><i class="fa fa-bell "></i></a>
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i></a>
+            </li>
             {% endblock %}
         </nav>
         {% block content %}{% endblock %}

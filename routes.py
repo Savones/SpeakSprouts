@@ -113,17 +113,17 @@ def sent_request():
     partners.request_sent(session["username"], session["profile_username"], message)
     return redirect("/open_new")
 
-@app.route("/notifs")
-def notifs():
-    notifs = partners.get_requests(session["username"])
-    return render_template("notifs.html", notifs = notifs)
+@app.route("/notifications")
+def notifications():
+    notifications = partners.get_requests(session["username"])
+    return render_template("notifications.html", notifications = notifications)
 
 @app.route("/request_answer")
 def request_answer():
     answer = request.args.get("answer")
     user_id = request.args.get("id")
     partners.change_status(session["username"], user_id, answer)
-    return redirect("/notifs")
+    return redirect("/notifications")
 
 @app.route("/open_post")
 def open_post():
