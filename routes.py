@@ -129,9 +129,11 @@ def request_answer():
 def open_post():
     post_id = request.args.get("id")
     post_info = "None"
+    post_comments = []
     if post_id != "None":
         post_info = posts.get_post_info(post_id)
-    return render_template("post.html", post = post_info)
+        post_comments = posts.get_comments(post_id)
+    return render_template("post.html", post = post_info, comments = post_comments)
 
 @app.route("/add_post", methods=["POST"])
 def add_post():
@@ -143,10 +145,11 @@ def add_post():
 
 @app.route("/add_comment", methods=["POST"])
 def add_comment():
+    post_id = request.args.get("post_id")
     author = session["username"]
     content = request.form.get("content")
-    posts.add_comment(author, content)
-    return redirect("/open_new")
+    posts.add_comment(post_id, author, content)
+    return redirect(f"/open_post?id={post_id}")
 
 
 # For security

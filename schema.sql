@@ -50,3 +50,11 @@ CREATE TABLE community_posts (
     author_id INTEGER REFERENCES users(id) NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+CREATE TABLE post_comments (
+    id SERIAL PRIMARY KEY,
+    post_id INT REFERENCES community_posts(id),
+    author_id INT REFERENCES users(id),
+    timestamp TIMESTAMPTZ DEFAULT NOW(),
+    content TEXT
+);
