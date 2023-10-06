@@ -29,15 +29,15 @@ def open_login():
 def open_register():
     return render_template("register.html")
 
-@app.route("/open_new")
-def open_new():
+@app.route("/home")
+def home():
     partners_info = partners.get_partners(session["username"])
     partners_chat_ids = [id[1] for id in partners_info]
     latest_messages = messages.get_latest_messages(partners_chat_ids)
-    stuff = [(partner, latest_messages[i]) for i, partner in enumerate(partners_info)]
-    words2 = partners.get_non_partners(session["username"])
+    latest_message_info = [(partner, latest_messages[i]) for i, partner in enumerate(partners_info)]
+    non_partners = partners.get_non_partners(session["username"])
     posts_info = posts.get_posts()
-    return render_template("new.html", items = stuff, also_items = words2, posts = posts_info)
+    return render_template("home.html", chats = latest_message_info, find_users = non_partners, posts = posts_info)
 
 @app.route("/open_chat")
 def open_chat():
@@ -51,7 +51,7 @@ def login():
     password = request.form["password"]
     if users.login(username, password):
         session["username"] = username
-        return redirect("/open_new")
+        return redirect("/home")
     return render_template("login.html")
 
 @app.route("/logout")
@@ -73,7 +73,7 @@ def register():
     password = request.form["password"]
     if users.register(username, password):
         session["username"] = username
-        return redirect("/open_new")
+        return redirect("/home")
     return render_template("register.html")
 
 @app.route("/chat", methods=["GET", "POST"])
@@ -111,7 +111,7 @@ def edit_profile():
 def sent_request():
     message = request.form.get("message")
     partners.request_sent(session["username"], session["profile_username"], message)
-    return redirect("/open_new")
+    return redirect("/home")
 
 @app.route("/notifications")
 def notifications():
@@ -141,7 +141,7 @@ def add_post():
     author = session["username"]
     content = request.form.get("content")
     posts.add_post(author, title, content)
-    return redirect("/open_new")
+    return redirect("/home")
 
 @app.route("/add_comment", methods=["POST"])
 def add_comment():
