@@ -34,11 +34,30 @@ def createUser(username, password):
 def add_profile(username):
     user_id = get_id(username)
     sql = text("INSERT INTO profiles (username, user_id, languages_known, language_levels, bio, profile_color) VALUES (:username, :user_id, NULL, NULL, NULL, NULL)")
-    db.session.execute(sql, {"username": username, "user_id": user_id[0]})
+    db.session.execute(sql, {"username": username, "user_id": user_id})
     db.session.commit()
 
 def getUsernames(username):
     sql = text("SELECT username FROM users WHERE username <> :username")
     result = db.session.execute(sql, {"username":username})
     return result
-    
+
+def delete_user(username):
+    user_id = get_id(username)
+
+    if user_id is not None:
+        try:
+            delete_user_query = text("DELETE FROM users WHERE id = :user_id")
+            db.session.execute(delete_user_query, {"user_id": user_id})
+            db.session.commit()
+            return True
+        except Exception as e:
+            db.session.rollback()
+            return False
+    else:
+        return False
+
+
+
+
+

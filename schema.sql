@@ -6,14 +6,14 @@ CREATE TABLE users (
 
 CREATE TABLE chats (
     id SERIAL PRIMARY KEY,
-    user1_id INTEGER REFERENCES users(id) NOT NULL,
-    user2_id INTEGER REFERENCES users(id) NOT NULL
+    user1_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    user2_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL
 );
 
 CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
-    chat_id INTEGER REFERENCES chats(id) NOT NULL,
-    sender_id INTEGER REFERENCES users(id) NOT NULL,
+    chat_id INTEGER REFERENCES chats(id) ON DELETE CASCADE NOT NULL,
+    sender_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     message_text TEXT NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -28,7 +28,7 @@ CREATE TABLE languages (
 CREATE TABLE profiles (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
-    user_id INT NOT NULL UNIQUE,
+    user_id INT REFERENCES users(id) ON DELETE CASCADE UNIQUE,
     languages_known JSONB,
     language_levels JSONB,
     bio TEXT,
@@ -37,24 +37,24 @@ CREATE TABLE profiles (
 
 CREATE TABLE language_partners (
     id SERIAL PRIMARY KEY,
-    user_id1 INT NOT NULL,
-    user_id2 INT NOT NULL,
+    user_id1 INT REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    user_id2 INT REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     request_status VARCHAR(20),
     request_message TEXT
 );
 
 CREATE TABLE community_posts (
-    id serial PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
-    author_id INTEGER REFERENCES users(id) NOT NULL,
+    author_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE TABLE post_comments (
     id SERIAL PRIMARY KEY,
-    post_id INT REFERENCES community_posts(id),
-    author_id INT REFERENCES users(id),
+    post_id INT REFERENCES community_posts(id) ON DELETE CASCADE,
+    author_id INT REFERENCES users(id) ON DELETE CASCADE,
     timestamp TIMESTAMPTZ DEFAULT NOW(),
     content TEXT
 );

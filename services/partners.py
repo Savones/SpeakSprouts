@@ -119,9 +119,14 @@ def get_non_partners(username):
 
     non_partners_query = text(
         "SELECT username FROM users WHERE id NOT IN "
-        "(SELECT user_id1 FROM language_partners WHERE user_id2 = :user_id) "
+        "(SELECT user_id1 FROM language_partners WHERE user_id2 = :user_id AND request_status = 'Accepted') "
         "AND id != :user_id"
     )
     non_partners = db.session.execute(non_partners_query, {"user_id": user_id}).fetchall()
 
     return non_partners
+
+
+def remove_partner(username, username2):
+    user2_id = get_id(username2)
+    change_status(username, user2_id, "rejected")

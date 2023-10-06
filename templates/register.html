@@ -9,7 +9,10 @@
         <input type="password" name="password" id="password" pattern=".{6,24}" title="Password must be 6-24 characters." required></p>
         <p>Confirm password:<br>
         <input type="password" name="confirm_password" id="confirm_password" pattern=".{6,24}" title="Password must be 6-24 characters." required></p>
-        <input type="submit" value="Register" class="button">
+        <div class="flex_display">
+            <a class="button red" href="/">Return</a>
+            <input type="submit" value="Register" class="button">
+        </div>
     </form>
 {% endblock %}
 

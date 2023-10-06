@@ -6,12 +6,18 @@
         <h2 class="margin">@{{ profile["username"] }}</h2 >
         <p class="bio">{{ profile["bio"] }}</p>
         {% if profile["username"] == session.username %}
-            <a href="/edit_profile" class="button">Edit profile</a>
+            <div class="flex_display">
+                <a href="/delete_account" onclick="youSure()" class="button red">Delete account</a>
+                <a href="/edit_profile" class="button">Edit profile</a>
+            </div>
         {% else %}
             {% if partner == False %}
-                <a onclick="openRequestForm(`{{ profile['username'] }}`)" class="button">Send request</a>
+                <a onclick="openRequestForm()" class="button">Send request</a>
             {% else %}
-            <a class="button" href="/open_chat?username={{ profile['username'] }}">Your chat</a>
+            <div class="flex_display">
+                <a href="/request_answer?answer='rejected'&username={{ profile['username'] }}" class="button red">Remove</a>
+                <a class="button" href="/open_chat?username={{ profile['username'] }}">Open chat</a>
+            </div>
             {% endif %}
         {% endif %}
     </div>
@@ -23,19 +29,32 @@
     </div>
 </div>
 
-<form action="/sent_request" method="POST" id="request_form" class="hidden"></form>
+<form action="/sent_request" method="POST" id="request_form" class="hidden">
+    <h2>Language partner request to {{ profile["username"] }}</h2>
+    <textarea type="text" name="message" placeholder="Write a message" form="request_form"></textarea>
+    <div class="flex_display">
+        <a href="/profile?username={{ profile['username'] }}" class="button red">Cancel</a>
+        <input type="submit" value="Send request" class="button" form="request_form">
+    </div>
+</form>
 {% endblock %}
 
 {% block scirpt %}
 <script>
-    function openRequestForm(username) {
+    document.getElementById('request_form')
+    .addEventListener('submit', function (e) {
+        if (document.querySelector('#request_form > textarea').value.length > 50) {
+            e.preventDefault()
+            alert('Request message can have max. 50 characters.');
+        }
+    });
+    function openRequestForm() {
         const requestContainer = document.getElementById('request_form');
         requestContainer.classList.add('request_form');
-        requestContainer.innerHTML = 
-            `<h2>Language partner request to ${username}</h2>
-            <textarea type="text" name="message" placeholder="Write a message" form="request_form"></textarea>
-            <a href="/profile?username={{ profile['username'] }}" class="button">Cancel</a>
-            <input type="submit" value="Send request" class="button" form="request_form">`;
+    };
+
+    function youSure() {
+        alert('Are you sure you want to delete your account?')
     }
 </script>
 {% endblock %}

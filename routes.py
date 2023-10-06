@@ -11,8 +11,9 @@ import testing
 import re
 
 re = {
-    'username': re.compile(r"\w{3,12}"),
-    'password': re.compile(r".{6,24}")
+    'username': re.compile(r"^\w{3,12}$"),
+    'password': re.compile(r"^.{6,24}$"),
+    'request': re.compile(r"^.{0,50}$"),
 }
 
 @app.route("/")
@@ -110,6 +111,9 @@ def edit_profile():
 @app.route("/sent_request", methods=["GET", "POST"])
 def sent_request():
     message = request.form.get("message")
+    global re
+    if not re["request"].match(message):
+        return render_template("error.html")
     partners.request_sent(session["username"], session["profile_username"], message)
     return redirect("/home")
 
@@ -122,6 +126,10 @@ def notifications():
 def request_answer():
     answer = request.args.get("answer")
     user_id = request.args.get("id")
+    if not user_id:
+        username2 = request.args.get("username")
+        partners.remove_partner(session["username"], username2)
+        return redirect(f"/profile?username={username2}")
     partners.change_status(session["username"], user_id, answer)
     return redirect("/notifications")
 
@@ -150,6 +158,11 @@ def add_comment():
     content = request.form.get("content")
     posts.add_comment(post_id, author, content)
     return redirect(f"/open_post?id={post_id}")
+
+@app.route("/delete_account")
+def delete_account():
+    users.delete_user(session["username"])
+    return redirect("/")
 
 
 # For security
