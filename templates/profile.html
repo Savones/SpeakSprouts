@@ -2,6 +2,8 @@
 {% block content %}
 <div>
     <div class="flex_container profile_container">
+        <p>{{response}}</p>
+        <!-- <img src="{{ url_for('profile', username=session.username) }}" alt="Profile Picture"> -->
         <div class="profile_photo"></div>
         <h2 class="margin">@{{ profile["username"] }}</h2 >
         <p class="bio">{{ profile["bio"] }}</p>
@@ -23,8 +25,12 @@
     </div>
 
     <div class="flex_container profile_container">
-        <p>Languages: {{ profile["languages"] }}</p>
-        <p>Language levels: {{ profile["levels"] }}</p>
+        {% for language in profile["languages"] %}
+            <div class="flex_display">
+                {{language[2]}}
+                {{language[1]}}
+            </div>
+        {% endfor %}
         <p>Color: {{ profile["color"] }}</p>
     </div>
 </div>

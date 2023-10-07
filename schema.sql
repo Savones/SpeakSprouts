@@ -25,12 +25,18 @@ CREATE TABLE languages (
     iso_639_1_code CHAR(2) NOT NULL
 );
 
+CREATE TABLE language_levels (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    language_id INTEGER REFERENCES languages(id) ON DELETE CASCADE,
+    proficiency_level VARCHAR(255) NOT NULL,
+    UNIQUE (user_id, language_id)
+);
+
 CREATE TABLE profiles (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     user_id INT REFERENCES users(id) ON DELETE CASCADE UNIQUE,
-    languages_known JSONB,
-    language_levels JSONB,
     bio TEXT,
     profile_color VARCHAR(7)
 );

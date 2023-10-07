@@ -30,6 +30,6 @@ def read_json():
     db.session.commit()
         
 def get_languages():
-    sql = text("SELECT language_name FROM languages")
+    sql = text("SELECT language_name FROM languages ORDER BY language_name")
     languages = db.session.execute(sql).fetchall()
     return languages
