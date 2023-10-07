@@ -3,6 +3,8 @@
 <div class="flex_container">
     <h1>Edit profile here!</h1>
     <form method="POST" action="/profile?username={{ session.username }}" enctype="multipart/form-data">
+        <h3>Choose profile picture</h3>
+        <input type="file" name="file" id="file">
         <h3>Bio</h2>
         <textarea type="text" name="bio">{{ profile["bio"] }}</textarea><br>
         <h3>Languages</h2>
@@ -19,8 +21,8 @@
                 {% endfor %}
             </div>
             <a href="/edit_profile?deleted={{ language[2] }}"><i class="fa fa-trash"></i></a>
-                </div>
-            {% endfor %}
+        </div>
+        {% endfor %}
         <button id="add_language" class="button" type="button">Add language</button>
         <div id="languages_selection" class="hidden">
             <div class="drop_down">

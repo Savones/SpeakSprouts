@@ -2,9 +2,7 @@
 {% block content %}
 <div>
     <div class="flex_container profile_container">
-        <p>{{response}}</p>
-        <!-- <img src="{{ url_for('profile', username=session.username) }}" alt="Profile Picture"> -->
-        <div class="profile_photo"></div>
+        <img class="profile_photo" src="/profile_picture?username={{session['profile_username']}}" alt="Profile Picture">
         <h2 class="margin">@{{ profile["username"] }}</h2 >
         <p class="bio">{{ profile["bio"] }}</p>
         {% if profile["username"] == session.username %}

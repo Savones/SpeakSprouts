@@ -38,7 +38,8 @@ CREATE TABLE profiles (
     username VARCHAR(255) NOT NULL UNIQUE,
     user_id INT REFERENCES users(id) ON DELETE CASCADE UNIQUE,
     bio TEXT,
-    profile_color VARCHAR(7)
+    profile_color VARCHAR(7),
+    image_data BYTEA
 );
 
 CREATE TABLE language_partners (

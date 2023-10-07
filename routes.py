@@ -9,6 +9,8 @@ import json
 import services.partners as partners
 import testing
 import re
+from flask import send_file
+import io
 
 re = {
     'username': re.compile(r"^\w{3,12}$"),
@@ -88,25 +90,45 @@ def chat():
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
     session["profile_username"] = request.args.get("username")
-    profile_info = profiles.get_profile(session["profile_username"])
-    if request.method == "GET":
-        result = partners.check_partner(session["username"], session["profile_username"])
-        return render_template("profile.html", profile=profile_info, partner = result)
-    elif request.method == "POST":
+    result = partners.check_partner(session["username"], session["profile_username"])
+
+    if request.method == "POST":
+        file = request.files["file"]
+        if file:
+            profiles.add_profile_picture(file)
         updated_profile = {}
         for key, value in request.form.items():
-            if key == "languages_known":
-                updated_profile[key] = json.dumps(request.form.getlist("languages_known"))
+            if key == "languages":
+                updated_profile[key] = json.dumps(request.form.getlist("languages"))
             else:
                 updated_profile[key] = value
         profiles.update_profile(session["username"], updated_profile)
-        return redirect("/profile?username=" + session["username"])
+
+    profile_info = profiles.get_profile(session["profile_username"])
+    return render_template("profile.html", profile=profile_info, partner=result)
+    
+@app.route('/profile_picture')
+def profile_picture():
+    username = request.args.get("username")
+    data = profiles.get_profile_picture(username)
+    return send_file(io.BytesIO(data), mimetype='image/jpeg')
 
 @app.route("/edit_profile")
 def edit_profile():
+    deleted = request.args.get("deleted")
+    language = request.args.get("language")
+    level = request.args.get("level")
+    language_id = request.args.get("id")
+    if level and id:
+        profiles.update_level(language_id, session["username"], level)
+    if language:
+        profiles.update_language(language, session["username"])
+    if deleted:
+        profiles.delete_language(deleted, session["username"])
     profile_info = profiles.get_profile(session["username"])
     languages = db.get_languages()
-    return render_template("edit.html", profile = profile_info, languages = languages)
+    proficiencies = ["Unspecified", "Beginner", "Intermediate", "Fluent"]
+    return render_template("edit.html", profile = profile_info, languages = languages, levels = proficiencies)
 
 @app.route("/sent_request", methods=["GET", "POST"])
 def sent_request():

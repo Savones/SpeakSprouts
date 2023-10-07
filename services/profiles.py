@@ -1,6 +1,7 @@
 from sqlalchemy.sql import text
 from db import db
-from services.mod import get_id 
+from services.mod import get_id
+from flask import session
 
 def get_profile(username):
     sql = text("SELECT * FROM profiles WHERE username = :username")
@@ -62,3 +63,15 @@ def update_level(language_id, username, level):
         )
     db.session.execute(update_query, {"level": level, "user_id": user_id, "language_id": language_id})
     db.session.commit()
+
+def add_profile_picture(file):
+    data = file.read()
+    sql = text("UPDATE profiles SET image_data = :image_data WHERE username = :username")
+    db.session.execute(sql, {"username":session["username"], "image_data":data})
+    db.session.commit()
+
+def get_profile_picture(username):
+    sql = text("SELECT image_data FROM profiles WHERE username=:username")
+    result = db.session.execute(sql, {"username":username})
+    data = result.fetchone()[0]
+    return data

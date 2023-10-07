@@ -33,7 +33,7 @@ def createUser(username, password):
 
 def add_profile(username):
     user_id = get_id(username)
-    sql = text("INSERT INTO profiles (username, user_id, languages_known, language_levels, bio, profile_color) VALUES (:username, :user_id, NULL, NULL, NULL, NULL)")
+    sql = text("INSERT INTO profiles (username, user_id, bio, profile_color, image_data) VALUES (:username, :user_id, NULL, NULL, NULL)")
     db.session.execute(sql, {"username": username, "user_id": user_id})
     db.session.commit()
 
