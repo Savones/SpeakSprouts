@@ -4,7 +4,8 @@
     <h1>Edit profile here!</h1>
     <form method="POST" action="/profile?username={{ session.username }}" enctype="multipart/form-data">
         <h3>Choose profile picture</h3>
-        <input type="file" name="file" id="file">
+        <label for="file" class="btn button">Select image</label>
+        <input type="file" style="visibility:hidden;" name="file" id="file">
         <h3>Bio</h2>
         <textarea type="text" name="bio">{{ profile["bio"] }}</textarea><br>
         <h3>Languages</h2>
@@ -37,7 +38,7 @@
 </div>
 {% endblock %}
 
-{% block scirpt %}
+{% block script %}
 <script>
     document.getElementById('add_language').addEventListener('click', function() {
         const languagesContainer = document.getElementById('languages_selection');

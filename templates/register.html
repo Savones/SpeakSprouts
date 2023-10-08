@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block buttons %}{% endblock %}
 {% block content %}
-    <form action="/register" method="POST" onsubmit="return checkPassword()">
+    <form class="index_container" action="/register" method="POST" onsubmit="return checkPassword()">
         <h1>Register</h1>
         <p>Username:<br>
         <input type="text" name="username" pattern="\w{3,12}" title="Username must be 3-12 characters and can only contain letters, numbers, and underscores." required>
@@ -16,7 +16,7 @@
     </form>
 {% endblock %}
 
-{% block scirpt %}
+{% block script %}
 <script>
     function checkPassword(){
         const password = document.getElementById('password').value;
