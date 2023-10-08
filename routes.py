@@ -17,6 +17,11 @@ re = {
     'request': re.compile(r"^.{0,50}$"),
 }
 
+@app.after_request
+def after_request(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return response
+
 @app.route("/")
 def index():
     db.read_json()
