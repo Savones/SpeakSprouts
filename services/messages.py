@@ -1,6 +1,6 @@
-from db import db
 from sqlalchemy.sql import text
 from datetime import datetime
+from db import db
 from services.mod import get_id 
 
 def get_chat_id(sender_name, receiver_name):
@@ -28,17 +28,12 @@ def get_chat_id(sender_name, receiver_name):
         result = db.session.execute(
             chat_insert_query, {"user1_id": sender_id, "user2_id": receiver_id}
         )
-
         chat_id = result.scalar()
         db.session.commit()
-
     return chat_id
 
-
 def save_message(chat_id, sender_username, message):
-
     sender_id = get_id(sender_username)
-
     timestamp = datetime.now()
 
     insert_message = text(
@@ -48,7 +43,6 @@ def save_message(chat_id, sender_username, message):
     db.session.execute(
             insert_message, {"chat_id":chat_id, "sender_id":sender_id, "message_text":message, "timestamp":timestamp}
         )
-    
     db.session.commit()
 
 def get_messages(chat_id, username):
@@ -59,7 +53,6 @@ def get_messages(chat_id, username):
     return messages, sender_id
 
 def get_latest_messages(chat_ids):
-
     latest_messages = []
     for chat_id in chat_ids:
         latest_message_query = text(
@@ -71,5 +64,4 @@ def get_latest_messages(chat_ids):
         )
         latest_message = db.session.execute(latest_message_query, {"chat_id": chat_id}).scalar()
         latest_messages.append(latest_message)
-
     return latest_messages

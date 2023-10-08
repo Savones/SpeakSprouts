@@ -1,16 +1,15 @@
-from app import app
-from flask import render_template, request, redirect, session, make_response, jsonify, abort
-import services.users as users
-import services.messages as messages
-import services.profiles as profiles
-import services.posts as posts
-import db
 import json
-import services.partners as partners
-import testing
-import re
-from flask import send_file
 import io
+import re
+from flask import render_template, request, redirect, session, send_file
+from app import app
+import db
+import testing
+from services import users
+from services import messages
+from services import profiles
+from services import posts
+from services import partners
 
 re = {
     'username': re.compile(r"^\w{3,12}$"),
@@ -37,7 +36,7 @@ def home():
     partners_info = partners.get_partners(session["username"])
     partners_chat_ids = [id[1] for id in partners_info]
     latest_messages = messages.get_latest_messages(partners_chat_ids)
-    latest_message_info = [(partner, latest_messages[i]) for i, partner in enumerate(partners_info)]
+    message_info = [(partner, latest_messages[i]) for i, partner in enumerate(partners_info)]
     non_partners = partners.get_non_partners(session["username"])
     posts_info = posts.get_posts()
     return render_template("home.html", chats = latest_message_info, find_users = non_partners, posts = posts_info)
@@ -85,7 +84,8 @@ def chat():
         message = request.form["message"]
         messages.save_message(session["chat_id"],session["username"], message)
     sent_messages, sender_id = messages.get_messages(session["chat_id"],session["username"])
-    return render_template("chat.html", other_chatter=request.args.get("username"), messages=sent_messages, sender = sender_id)
+    other = request.args.get("username")
+    return render_template("chat.html", other_chatter=other, messages=sent_messages, sender = sender_id)
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
@@ -127,8 +127,8 @@ def edit_profile():
         profiles.delete_language(deleted, session["username"])
     profile_info = profiles.get_profile(session["username"])
     languages = db.get_languages()
-    proficiencies = ["Unspecified", "Beginner", "Intermediate", "Fluent"]
-    return render_template("edit.html", profile = profile_info, languages = languages, levels = proficiencies)
+    levels = ["Unspecified", "Beginner", "Intermediate", "Fluent"]
+    return render_template("edit.html", profile = profile_info, languages = languages, levels = levels)
 
 @app.route("/sent_request", methods=["GET", "POST"])
 def sent_request():
@@ -140,7 +140,7 @@ def sent_request():
     return redirect("/home")
 
 @app.route("/notifications")
-def notifications():
+def users_notifications():
     notifications = partners.get_requests(session["username"])
     return render_template("notifications.html", notifications = notifications)
 

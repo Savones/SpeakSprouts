@@ -1,7 +1,7 @@
 from sqlalchemy.sql import text
+from flask import session
 from db import db
 from services.mod import get_id
-from flask import session
 
 def get_profile(username):
     sql = text("SELECT * FROM profiles WHERE username = :username")
