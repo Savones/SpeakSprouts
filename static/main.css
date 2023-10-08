@@ -325,6 +325,7 @@ ul {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: #d0aaff;
 }
 
 .chat_form {

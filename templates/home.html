@@ -7,7 +7,7 @@
         {% for chat in chats %}
         <div class="chat_box">
             <div class="user_links">
-                <h3 class="username">{{ chat[0][0] }}</h3>
+                <h3 class="username">@{{ chat[0][0] }}</h3>
                 <a href="/profile?username={{ chat[0][0] }}"><i class="fa fa-user icon"></i></a>
             </div>
             <div class="user_links last_text">
@@ -37,7 +37,7 @@
         <input class="search_bar" type="search" placeholder="Search">
         {% for user in find_users %}
         <div class="user_links brown">
-            <h3 class="username">{{ user[0] }}</h3>
+            <h3 class="username">@{{ user[0] }}</h3>
             <a href="/profile?username={{ user[0] }}"><i class="fa fa-user icon"></i></a>
         </div>
         {% endfor %}
