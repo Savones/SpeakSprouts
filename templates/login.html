@@ -13,3 +13,12 @@
         </div>
     </form>
 {% endblock %}
+
+{% block script %}
+<script>
+    const loginSuccess = {{ login|tojson|safe }};
+    if (!loginSuccess) {
+        alert('Username and/or password incorrect.');
+    }
+</script>
+{% endblock %}

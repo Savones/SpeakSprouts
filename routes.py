@@ -30,21 +30,24 @@ def index():
 
 @app.route("/open_login")
 def open_login():
-    return render_template("login.html")
+    return render_template("login.html", login = True)
 
 @app.route("/open_register")
 def open_register():
-    return render_template("register.html")
+    return render_template("register.html", registration = True)
 
 @app.route("/home")
 def home():
+    registration = request.args.get("registration")
+    if not registration:
+        registration = False
     partners_info = partners.get_partners(session["username"])
     partners_chat_ids = [id[1] for id in partners_info]
     latest_messages = messages.get_latest_messages(partners_chat_ids)
     message_info = [(partner, latest_messages[i]) for i, partner in enumerate(partners_info)]
     non_partners = partners.get_non_partners(session["username"])
     posts_info = posts.get_posts()
-    return render_template("home.html", chats = latest_message_info, find_users = non_partners, posts = posts_info)
+    return render_template("home.html", chats = message_info, find_users = non_partners, posts = posts_info, registration = registration)
 
 @app.route("/open_chat")
 def open_chat():
@@ -59,7 +62,7 @@ def login():
     if users.login(username, password):
         session["username"] = username
         return redirect("/home")
-    return render_template("login.html")
+    return render_template("login.html", login = False)
 
 @app.route("/logout")
 def logout():
@@ -68,8 +71,6 @@ def logout():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-
-    # Checks on server side that inputs are acceptable
     global re
     if not re["username"].match(request.form["username"]) \
     or not re["password"].match(request.form["password"]) \
@@ -80,8 +81,8 @@ def register():
     password = request.form["password"]
     if users.register(username, password):
         session["username"] = username
-        return redirect("/home")
-    return render_template("register.html")
+        return redirect("/home?registration=True")
+    return render_template("register.html", registration = False)
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
@@ -190,12 +191,3 @@ def add_comment():
 def delete_account():
     users.delete_user(session["username"])
     return redirect("/")
-
-
-# For security
-
-# response = make_response(render_template("login.html"))
-# response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate'
-# return response
-
-# add checks for the right to open a page

@@ -18,6 +18,11 @@
 
 {% block script %}
 <script>
+    const registrationSuccess = {{ registration|tojson|safe }};
+    if (!registrationSuccess) {
+        alert('Username already in use, please choose another one.');
+    }
+
     function checkPassword(){
         const password = document.getElementById('password').value;
         const confirm_password = document.getElementById('confirm_password').value;

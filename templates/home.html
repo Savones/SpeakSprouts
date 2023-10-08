@@ -44,3 +44,12 @@
     </div>
 </div>
 {% endblock %}
+
+{% block script %}
+<script>
+    const registrationSuccess = {{ registration|tojson|safe }};
+    if (registrationSuccess) {
+        alert('Registration successful!');
+    }
+</script>
+{% endblock %}
