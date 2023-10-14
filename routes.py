@@ -62,6 +62,12 @@ def register():
 
 @app.route("/home")
 def home():
+    try:
+        query = request.args["query"]
+        find_users = users.search_users(query)
+    except:
+        find_users = users.all_users(session["username"])
+
     registration = request.args.get("registration")
     if not registration:
         registration = False

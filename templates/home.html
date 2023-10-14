@@ -40,14 +40,21 @@
     </div>
 
     <div class="find_container">
-        <h2>Find language partners</h2>
-        <input class="search_bar" type="search" placeholder="Search">
+        <h2>All users</h2>
+        <form action="/home" method="GET">
+            <div class="flex_display">
+                <input class="search_bar" type="search" placeholder="Search by username" name="query">
+                <i type="submit" class="fas fa-search"></i>
+            </div>
+        </form>
+        <div class="flex_container find_users">
         {% for user in find_users %}
         <div class="user_links brown">
             <h3 class="username">@{{ user[0] }}</h3>
             <a href="/profile?username={{ user[0] }}"><i class="fa fa-user icon"></i></a>
         </div>
         {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}

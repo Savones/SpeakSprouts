@@ -49,3 +49,13 @@ def delete_user(username):
             return False
     else:
         return False
+
+def all_users(username):
+    sql = text("SELECT username FROM users WHERE username !=:username")
+    result = db.session.execute(sql, {"username":username})
+    return result
+
+def search_users(search):
+    sql = text("SELECT username FROM users WHERE username LIKE :search")
+    all_users = db.session.execute(sql, {"search":"%"+search+"%"}).fetchall()
+    return all_users
