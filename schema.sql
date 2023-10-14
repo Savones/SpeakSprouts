@@ -35,7 +35,6 @@ CREATE TABLE language_levels (
 
 CREATE TABLE profiles (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(255) NOT NULL UNIQUE,
     user_id INT REFERENCES users(id) ON DELETE CASCADE UNIQUE,
     bio TEXT,
     profile_color VARCHAR(7),

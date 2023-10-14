@@ -31,9 +31,9 @@ def create_user(username, password):
 
 def add_profile(username):
     user_id = get_id(username)
-    sql = text("""INSERT INTO profiles (username, user_id, bio, profile_color, image_data) 
-               VALUES (:username, :user_id, NULL, NULL, NULL)""")
-    db.session.execute(sql, {"username": username, "user_id": user_id})
+    sql = text("""INSERT INTO profiles (user_id, bio, profile_color, image_data) 
+               VALUES (:user_id, NULL, NULL, NULL)""")
+    db.session.execute(sql, {"user_id": user_id})
     db.session.commit()
 
 def delete_user(username):

@@ -4,7 +4,11 @@ from db import db
 from services.mod import get_id
 
 def get_profile(username):
-    sql = text("SELECT * FROM profiles WHERE username = :username")
+    sql = text(
+        "SELECT * FROM profiles " 
+        "JOIN users ON profiles.user_id = users.id " 
+        "WHERE users.username = :username"
+    )
     profile = db.session.execute(sql, {"username":username}).fetchone()
 
     sql = text(
@@ -16,20 +20,24 @@ def get_profile(username):
     languages = db.session.execute(sql, {"user_id":profile[0]}).fetchall()
 
     profile_dict = {}
-    profile_dict["username"] = profile[1]
-    profile_dict["bio"] = profile[3]
-    profile_dict["color"] = profile[4]
+    profile_dict["username"] = username
+    profile_dict["bio"] = profile[2]
+    profile_dict["color"] = profile[3]
     profile_dict["languages"] = languages
 
     return profile_dict
 
 def update_profile(username, updated_profile):
-    for key, value in updated_profile.items():
-        if key == "languages":
-            pass
+    # Validates key data before inserting
+    columns = ["image_data", "bio", "profile_color"]
 
-        else:
-            sql = text(f"UPDATE profiles SET {key} = :value WHERE username = :username")
+    for key, value in updated_profile.items():
+        if key != "languages" and key in columns:
+            sql = text(
+                f"UPDATE profiles "
+                f"SET {key} = :value "
+                f"WHERE user_id = (SELECT id FROM users WHERE username = :username)"
+            )
             db.session.execute(sql, {"key":key, "value":value, "username":username})
     db.session.commit()
 
@@ -66,12 +74,19 @@ def update_level(language_id, username, level):
 
 def add_profile_picture(file):
     data = file.read()
-    sql = text("UPDATE profiles SET image_data = :image_data WHERE username = :username")
+    sql = text(
+        "UPDATE profiles " 
+        "SET image_data = :image_data " 
+        "WHERE user_id = (SELECT id FROM users WHERE username = :username)"
+    )
     db.session.execute(sql, {"username":session["username"], "image_data":data})
     db.session.commit()
 
 def get_profile_picture(username):
-    sql = text("SELECT image_data FROM profiles WHERE username=:username")
+    sql = text(
+        "SELECT image_data FROM profiles " 
+        "JOIN users ON profiles.user_id = users.id " 
+        "WHERE users.username = :username")
     result = db.session.execute(sql, {"username":username})
     data = result.fetchone()[0]
     return data
