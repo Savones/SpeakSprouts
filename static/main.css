@@ -35,6 +35,12 @@ i {
     font-size: 18px;
     padding: 10px;
     transition: 0.3s;
+    cursor: pointer;
+}
+
+nav i {
+    font-size: 20px;
+    margin-left: 3px;
 }
 
 a {
@@ -96,6 +102,10 @@ i:hover {
     align-items: center;
 }
 
+.flex_text {
+    display: flex;
+}
+
 .profile_container {
     background-color: var(--sandy-brown);
     padding: 30px;
@@ -139,13 +149,18 @@ nav {
     display: flex;
     align-items: center;
     flex-direction: column;
-    width: 300px;
+    width: 350px;
     border-radius: 4px;
     text-align: center;
     background-color: var(--sandy-brown);
     box-shadow: 0px 0px 15px var(--black);
     margin-bottom: 100px;
     height: 1000px;
+    overflow-y: auto;
+}
+
+.find_users {
+    margin-top: 30px;
 }
 
 .chats_container {
@@ -158,6 +173,7 @@ nav {
     box-shadow: 0px 0px 15px var(--black);
     margin-bottom: 100px;
     height: 1000px;
+    overflow-y: auto;
 }
 
 .chat_box {
@@ -180,7 +196,7 @@ nav {
 }
 
 .community_posts_container {
-    background-color: var(--sandy-brown);
+    background-color: var(--dark1);
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -276,10 +292,10 @@ nav {
 }
 
 .search_bar {
-    margin-bottom: 20px;
-    padding: 10px;
+    padding: 7px;
     width: 200px;
 }
+
 
 .hidden {
     display: none;
@@ -406,6 +422,8 @@ textarea {
 
 .flex_display {
     display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .timestamp {
