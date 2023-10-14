@@ -28,13 +28,37 @@ def index():
     testing.create_dummy_users()
     return render_template("index.html")
 
-@app.route("/open_login")
-def open_login():
-    return render_template("login.html", login = True)
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        if users.login(username, password):
+            session["username"] = username
+            return redirect("/home")
+        success = False
+    else:
+        success = True
+    return render_template("login.html", login = success)
 
-@app.route("/open_register")
-def open_register():
-    return render_template("register.html", registration = True)
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        global re
+        if not re["username"].match(request.form["username"]) \
+        or not re["password"].match(request.form["password"]) \
+        or not request.form["password"] == request.form["confirm_password"]:
+            return render_template("error.html")
+
+        username = request.form["username"]
+        password = request.form["password"]
+        if users.register(username, password):
+            session["username"] = username
+            return redirect("/home?registration=True")
+        success = False
+    else:
+        success = True
+    return render_template("register.html", registration = success)
 
 @app.route("/home")
 def home():
@@ -55,34 +79,10 @@ def open_chat():
     session["chat_id"] = chat_id
     return redirect(f"/chat?username={request.args.get('username')}")
 
-@app.route("/login",methods=["POST"])
-def login():
-    username = request.form["username"]
-    password = request.form["password"]
-    if users.login(username, password):
-        session["username"] = username
-        return redirect("/home")
-    return render_template("login.html", login = False)
-
 @app.route("/logout")
 def logout():
     del session["username"]
     return redirect("/")
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    global re
-    if not re["username"].match(request.form["username"]) \
-    or not re["password"].match(request.form["password"]) \
-    or not request.form["password"] == request.form["confirm_password"]:
-        return render_template("error.html")
-
-    username = request.form["username"]
-    password = request.form["password"]
-    if users.register(username, password):
-        session["username"] = username
-        return redirect("/home?registration=True")
-    return render_template("register.html", registration = False)
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
