@@ -7,7 +7,7 @@
         <p class="bio">{{ profile["bio"] if profile["bio"] != None else "" }}</p>
         {% if profile["username"] == session.username %}
             <div class="flex_display">
-                <a href="/delete_account" onclick="youSure()" class="button red">Delete account</a>
+                <a onclick="youSure()" class="button red">Delete account</a>
                 <a href="/edit_profile" class="button">Edit profile</a>
             </div>
         {% else %}
@@ -59,7 +59,9 @@
     };
 
     function youSure() {
-        alert('Are you sure you want to delete your account?')
-    }
+        const answer = confirm('Are you sure you want to delete your account?')
+        if (answer) {
+        window.location.href = '/delete_account';
+    }}
 </script>
 {% endblock %}
