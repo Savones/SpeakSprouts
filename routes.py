@@ -65,13 +65,11 @@ def home():
     registration = request.args.get("registration")
     if not registration:
         registration = False
+
     partners_info = partners.get_partners(session["username"])
-    partners_chat_ids = [id[1] for id in partners_info]
-    latest_messages = messages.get_latest_messages(partners_chat_ids)
-    message_info = [(partner, latest_messages[i]) for i, partner in enumerate(partners_info)]
-    non_partners = partners.get_non_partners(session["username"])
+    message_info = messages.get_latest_messages(partners_info)
     posts_info = posts.get_posts()
-    return render_template("home.html", chats = message_info, find_users = non_partners, posts = posts_info, registration = registration)
+    return render_template("home.html", chats = message_info, find_users = find_users, posts = posts_info, registration = registration)
 
 @app.route("/open_chat")
 def open_chat():

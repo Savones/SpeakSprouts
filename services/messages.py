@@ -1,7 +1,7 @@
 from sqlalchemy.sql import text
 from datetime import datetime
 from db import db
-from services.mod import get_id 
+from services.mod import get_id
 
 def get_chat_id(sender_name, receiver_name):
     sender_id = get_id(sender_name)
@@ -52,16 +52,30 @@ def get_messages(chat_id, username):
     messages = db.session.execute(messages_query, {"chat_id": chat_id})
     return messages, sender_id
 
-def get_latest_messages(chat_ids):
+def query_latest_messages(chat_ids, partners_info):
     latest_messages = []
-    for chat_id in chat_ids:
+    for i, chat_id in enumerate(chat_ids):
+        message = {}
         latest_message_query = text(
-            "SELECT message_text "
-            "FROM messages "
-            "WHERE chat_id = :chat_id "
-            "ORDER BY timestamp DESC "
-            "LIMIT 1"
+            """
+            SELECT messages.message_text, users.username 
+            FROM messages 
+            JOIN users ON messages.sender_id = users.id 
+            WHERE messages.chat_id = :chat_id 
+            ORDER BY messages.timestamp DESC 
+            LIMIT 1;
+            """
         )
-        latest_message = db.session.execute(latest_message_query, {"chat_id": chat_id}).scalar()
-        latest_messages.append(latest_message)
+        latest_message = db.session.execute(latest_message_query, {"chat_id": chat_id}).fetchone()
+        if latest_message:
+            message["message"] = latest_message[0]
+            message["sender_username"] = latest_message[1]
+        message["partner_username"] = partners_info[i][0]
+        message["partner_id"] = partners_info[i][1]
+        latest_messages.append(message)
+    return latest_messages
+
+def get_latest_messages(partners_info):
+    partners_chat_ids = [id[1] for id in partners_info]
+    latest_messages = query_latest_messages(partners_chat_ids, partners_info)
     return latest_messages

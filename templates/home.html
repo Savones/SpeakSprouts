@@ -7,12 +7,19 @@
         {% for chat in chats %}
         <div class="chat_box">
             <div class="user_links">
-                <h3 class="username">@{{ chat[0][0] }}</h3>
-                <a href="/profile?username={{ chat[0][0] }}"><i class="fa fa-user icon"></i></a>
+                <h3 class="username">@{{ chat.partner_username }}</h3>
+                <a href="/profile?username={{ chat.partner_username }}"><i class="fa fa-user icon"></i></a>
             </div>
             <div class="user_links last_text">
-                <p class="latest_message">{{ chat[1] }}</p>
-                <a href="/open_chat?username={{ chat[0][0] }}"><i class="fa fa-comments icon blue"></i></a>
+                {% if chat.message %}
+                <div>
+                    <p class="latest_message dark_lilac">{{ chat.sender_username if chat.sender_username != session.username else "You"}}:</p>
+                    <p class="latest_message"> {{ chat.message }}</p>
+                </div>
+                {% else %}
+                    <p class="latest_message">Chat with {{ chat.partner_username }}!</p>
+                {% endif %}
+                <a href="/open_chat?username={{ chat.partner_username }}"><i class="fa fa-comments icon blue"></i></a>
             </div>
         </div>
         {% endfor %}
