@@ -1,4 +1,5 @@
 import json
+import secrets
 import io
 import re
 from flask import render_template, request, redirect, session, send_file
@@ -36,6 +37,7 @@ def login():
         password = request.form["password"]
         if users.login(username, password):
             session["username"] = username
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/home")
         success = False
     else:
@@ -92,6 +94,8 @@ def logout():
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            return render_template("error.html")
         message = request.form["message"]
         messages.save_message(session["chat_id"],session["username"], message)
     sent_messages, sender_id = messages.get_messages(session["chat_id"],session["username"])
@@ -104,6 +108,8 @@ def profile():
     result = partners.check_partner(session["username"], session["profile_username"])
 
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            return render_template("error.html")
         file = request.files["file"]
         if file:
             profiles.add_profile_picture(file)
@@ -143,6 +149,8 @@ def edit_profile():
 
 @app.route("/sent_request", methods=["GET", "POST"])
 def sent_request():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return render_template("error.html")
     message = request.form.get("message")
     global re
     if not re["request"].match(message):
@@ -178,6 +186,8 @@ def open_post():
 
 @app.route("/add_post", methods=["POST"])
 def add_post():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return render_template("error.html")
     title = request.form.get("title")
     author = session["username"]
     content = request.form.get("content")
@@ -186,6 +196,8 @@ def add_post():
 
 @app.route("/add_comment", methods=["POST"])
 def add_comment():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        return render_template("error.html")
     post_id = request.args.get("post_id")
     author = session["username"]
     content = request.form.get("content")

@@ -9,6 +9,7 @@
         <p>Post:<br>
         <textarea type="text" name="content"></textarea></p>
         <input type="submit" value="Post" class="button">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
 {% else %}
 <div class="flex_container">
@@ -21,6 +22,7 @@
         <h3>Comment</h3>
         <textarea type="text" name="content"></textarea></p>
         <input type="submit" value="Comment" class="button">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
 
     <div class="flex_container comments_container">
