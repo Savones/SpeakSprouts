@@ -19,6 +19,7 @@ re = {
 
 @app.after_request
 def after_request(response):
+    session["notifications"] = partners.notification_count(session["username"]) if "username" in session else 0
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     return response
 

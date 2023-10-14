@@ -129,9 +129,6 @@ def check_partner(username, check_username):
 def get_non_partners(username):
     user_id = get_id(username)
 
-    if user_id is None:
-        return []
-
     non_partners_query = text(
         """
         SELECT username FROM users WHERE id NOT IN 
@@ -146,3 +143,14 @@ def get_non_partners(username):
 def remove_partner(username, username2):
     user2_id = get_id(username2)
     change_status(username, user2_id, "rejected")
+
+def notification_count(username):
+    user_id = get_id(username)
+
+    notifs_query = text(
+        "SELECT COUNT(*) "
+        "FROM language_partners lp "
+        "WHERE lp.request_status = :status AND lp.user_id2 = :user_id2"
+    )
+    notifs_count = db.session.execute(notifs_query, {"user_id2": user_id, "status": "Pending"}).scalar()
+    return notifs_count

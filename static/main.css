@@ -510,3 +510,18 @@ textarea {
 .fa-trash {
     color: #d21827;
 }
+
+.badge {
+    position: absolute;
+    padding: 1px 5px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    right: 90px;
+    top: 25px;
+    font-size: 14px;
+  }
+
+.dark_lilac {
+    color: #ffffff;
+}

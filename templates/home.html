@@ -48,12 +48,12 @@
             </div>
         </form>
         <div class="flex_container find_users">
-        {% for user in find_users %}
-        <div class="user_links brown">
-            <h3 class="username">@{{ user[0] }}</h3>
-            <a href="/profile?username={{ user[0] }}"><i class="fa fa-user icon"></i></a>
-        </div>
-        {% endfor %}
+            {% for user in find_users %}
+            <div class="user_links brown">
+                <h3 class="username">@{{ user[0] }}</h3>
+                <a href="/profile?username={{ user[0] }}"><i class="fa fa-user icon"></i></a>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
