@@ -14,7 +14,7 @@
                 {% if chat.message %}
                 <div>
                     <p class="latest_message dark_lilac">{{ chat.sender_username if chat.sender_username != session.username else "You"}}:</p>
-                    <p class="latest_message"> {{ chat.message }}</p>
+                    <p class="latest_message"> {{ chat.message | safe  }}</p>
                 </div>
                 {% else %}
                     <p class="latest_message">Chat with {{ chat.partner_username }}!</p>
@@ -33,7 +33,7 @@
             <div class="post_container">
                 <p class="author">@{{ post.author_username }}</p>
                 <h3>{{ post.title }}</h3>
-                <p class="post_content">{{ post.content }}</p>
+                <p class="post_content">{{ post.content | safe }}</p>
                 <a href="open_post?id={{ post.id }}" class="button">View post</a>
             </div>
         {% endfor %}

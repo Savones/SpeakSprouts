@@ -2,7 +2,7 @@ import json
 import secrets
 import io
 import re
-from flask import render_template, request, redirect, session, send_file
+from flask import render_template, request, redirect, session, send_file, escape
 from app import app
 import db
 import testing
@@ -97,8 +97,7 @@ def chat():
         if session["csrf_token"] != request.form["csrf_token"]:
             return render_template("error.html")
         message = request.form["message"]
-        messages.save_message(session["chat_id"],session["username"], message)
-    sent_messages, sender_id = messages.get_messages(session["chat_id"],session["username"])
+        message = str(escape(message)).replace("\r\n", "</br>")
     other = request.args.get("username")
     return render_template("chat.html", other_chatter=other, messages=sent_messages, sender = sender_id)
 
@@ -190,7 +189,10 @@ def add_post():
         return render_template("error.html")
     title = request.form.get("title")
     author = session["username"]
+
     content = request.form.get("content")
+    content = str(escape(content)).replace("\r\n", "</br>")
+
     posts.add_post(author, title, content)
     return redirect("/home")
 
@@ -200,7 +202,10 @@ def add_comment():
         return render_template("error.html")
     post_id = request.args.get("post_id")
     author = session["username"]
+
     content = request.form.get("content")
+    content = str(escape(content)).replace("\r\n", "</br>")
+
     posts.add_comment(post_id, author, content)
     return redirect(f"/open_post?id={post_id}")
 

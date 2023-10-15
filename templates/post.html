@@ -16,7 +16,7 @@
     <div class="post_container post_view_container">
         <p class="author">@{{ post.author_username }}</p>
         <h2>{{ post.title }}</h2>
-        <p>{{ post.content }}</p>
+        <p>{{ post.content | safe }}</p>
     </div>
     <form action="/add_comment?post_id={{ post.id }}" method="POST">
         <h3>Comment</h3>
@@ -29,7 +29,7 @@
     {% for comment in comments %}
         <div class="post_container comment_container">
             <p class="author">@{{ comment.author_username }}</p>
-            <p>{{ comment.content }}</p>
+            <p>{{ comment.content | safe }}</p>
         </div>
     {% endfor %}
     </div>
