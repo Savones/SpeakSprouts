@@ -16,7 +16,7 @@
             {% else %}
             <div class="flex_display">
                 <a href="/request_answer?answer='rejected'&username={{ profile['username'] }}" class="button red">Remove</a>
-                <a class="button" href="/open_chat?username={{ profile['username'] }}">Open chat</a>
+                <a class="button" href="/chat?username={{ profile['username'] }}">Open chat</a>
             </div>
             {% endif %}
         {% endif %}

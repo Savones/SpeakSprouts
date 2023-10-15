@@ -19,7 +19,7 @@
                 {% else %}
                     <p class="latest_message">Chat with {{ chat.partner_username }}!</p>
                 {% endif %}
-                <a href="/open_chat?username={{ chat.partner_username }}"><i class="fa fa-comments icon blue"></i></a>
+                <a href="/chat?username={{ chat.partner_username }}"><i class="fa fa-comments icon blue"></i></a>
             </div>
         </div>
         {% endfor %}

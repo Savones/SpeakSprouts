@@ -66,25 +66,16 @@ def register():
 @app.route("/home")
 def home():
     try:
-        query = request.args["query"]
-        find_users = users.search_users(query)
+        find_users = users.search_users(request.args["query"])
     except:
         find_users = users.all_users(session["username"])
 
-    registration = request.args.get("registration")
-    if not registration:
-        registration = False
+    registration = request.args.get("registration", False)
 
     partners_info = partners.get_partners(session["username"])
     message_info = messages.get_latest_messages(partners_info)
     posts_info = posts.get_posts()
     return render_template("home.html", chats = message_info, find_users = find_users, posts = posts_info, registration = registration)
-
-@app.route("/open_chat")
-def open_chat():
-    chat_id = messages.get_chat_id(session["username"], request.args.get("username"))
-    session["chat_id"] = chat_id
-    return redirect(f"/chat?username={request.args.get('username')}")
 
 @app.route("/logout")
 def logout():
@@ -93,11 +84,14 @@ def logout():
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
+    chat_id = messages.get_chat_id(session["username"], request.args.get("username"))    
     if request.method == "POST":
         if session["csrf_token"] != request.form["csrf_token"]:
             return render_template("error.html")
         message = request.form["message"]
         message = str(escape(message)).replace("\r\n", "</br>")
+        messages.save_message(chat_id ,session["username"], message)
+    sent_messages, sender_id = messages.get_messages(chat_id, session["username"])
     other = request.args.get("username")
     return render_template("chat.html", other_chatter=other, messages=sent_messages, sender = sender_id)
 
@@ -213,3 +207,9 @@ def add_comment():
 def delete_account():
     users.delete_user(session["username"])
     return redirect("/")
+
+# Most important to-do's:
+    # changing urls, especially to chat?username="name"
+    # test csrf protection
+    # line breaks should be allowed
+    # data validation to chats, posts and comments, profile pic and bio
