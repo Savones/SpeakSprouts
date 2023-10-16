@@ -15,7 +15,7 @@ from services import partners
 re = {
     'username': re.compile(r"^\w{3,12}$"),
     'password': re.compile(r"^.{6,24}$"),
-    'request': re.compile(r"^.{0,50}$"),
+    'request': re.compile(r"^(.|[\n]){0,150}$"),
 }
 
 @app.after_request

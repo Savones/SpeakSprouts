@@ -7,7 +7,7 @@
     {% for notification in notifications %}
     <div class="notif_container">
         <p>@{{ notification[1] }}:</p>
-        <p>{{ notification[2] }}</p>
+        <p class="notif_message">{{ notification[2] }}</p>
         <div class="flex_display">
             <a href="/request_answer?answer=rejected&id={{ notification[0] }}" class="button red">Deny</a>
             <a href="/request_answer?answer=accepted&id={{ notification[0] }}" class="button green">Accept</a>

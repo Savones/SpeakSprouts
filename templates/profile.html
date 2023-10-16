@@ -49,9 +49,9 @@
 <script>
     document.getElementById('request_form')
     .addEventListener('submit', function (e) {
-        if (document.querySelector('#request_form > textarea').value.length > 50) {
+        if (document.querySelector('#request_form > textarea').value.length > 150) {
             e.preventDefault()
-            alert('Request message can have max. 50 characters.');
+            alert('Request message can have max. 150 characters.');
         }
     });
     function openRequestForm() {

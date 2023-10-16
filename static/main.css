@@ -452,6 +452,12 @@ textarea {
     justify-content: space-between;
 }
 
+.notif_message {
+    width: 300px;
+    color: #ba82ff;
+    white-space: normal;
+}
+
 .icon {
     color: var(--neon-lilac);
     border: 1px solid var(--neon-lilac);

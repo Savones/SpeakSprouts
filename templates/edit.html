@@ -7,7 +7,7 @@
         <label for="file" class="btn button">Select image</label>
         <input type="file" style="visibility:hidden;" name="file" id="file">
         <h3>Bio</h2>
-        <textarea type="text" name="bio">{{ profile["bio"] }}</textarea><br>
+        <textarea type="text" name="bio">{{ profile["bio"] if profile["bio"] != None else ""}}</textarea><br>
         <h3>Languages</h2>
         {% for language in profile["languages"] %}
         <div class="flex_display levels_container">
