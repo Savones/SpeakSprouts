@@ -549,3 +549,8 @@ textarea {
 .dark_lilac {
     color: #ffffff;
 }
+
+.invisible_button {
+    background-color: transparent;
+    border: none;
+}
