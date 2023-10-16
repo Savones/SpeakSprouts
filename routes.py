@@ -65,6 +65,8 @@ def register():
 
 @app.route("/home")
 def home():
+    if "username" not in session:
+        return redirect("/")
     try:
         find_users = users.search_users(request.args["query"])
     except:
@@ -84,6 +86,9 @@ def logout():
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
+    if "username" not in session:
+        return redirect("/")
+    
     chat_id = messages.get_chat_id(session["username"], request.args.get("username"))    
     if request.method == "POST":
         if session["csrf_token"] != request.form["csrf_token"]:
@@ -99,6 +104,9 @@ def chat():
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
+    if "username" not in session:
+        return redirect("/")
+    
     session["profile_username"] = request.args.get("username")
     result = partners.check_partner(session["username"], session["profile_username"])
 
@@ -127,6 +135,8 @@ def profile_picture():
 
 @app.route("/edit_profile")
 def edit_profile():
+    if "username" not in session:
+        return redirect("/")
     deleted = request.args.get("deleted")
     language = request.args.get("language")
     level = request.args.get("level")
@@ -155,6 +165,8 @@ def sent_request():
 
 @app.route("/notifications")
 def users_notifications():
+    if "username" not in session:
+        return redirect("/")
     notifications = partners.get_requests(session["username"])
     return render_template("notifications.html", notifications = notifications)
 
@@ -171,6 +183,8 @@ def request_answer():
 
 @app.route("/open_post")
 def open_post():
+    if "username" not in session:
+        return redirect("/")
     post_id = request.args.get("id")
     post_info = "None"
     post_comments = []
