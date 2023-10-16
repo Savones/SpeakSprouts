@@ -93,6 +93,8 @@ def chat():
         messages.save_message(chat_id ,session["username"], message)
     sent_messages, sender_id = messages.get_messages(chat_id, session["username"])
     other = request.args.get("username")
+    if not partners.check_partner(session["username"], other):
+        return redirect("/home")
     return render_template("chat.html", other_chatter=other, messages=sent_messages, sender = sender_id)
 
 @app.route("/profile", methods=["GET", "POST"])
