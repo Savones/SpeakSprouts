@@ -1,6 +1,6 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(12),
+    username VARCHAR(12) UNIQUE,
     password TEXT
 );
 
@@ -37,7 +37,6 @@ CREATE TABLE profiles (
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(id) ON DELETE CASCADE UNIQUE,
     bio TEXT,
-    profile_color VARCHAR(7),
     image_data BYTEA
 );
 

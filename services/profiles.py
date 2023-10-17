@@ -22,14 +22,13 @@ def get_profile(username):
     profile_dict = {}
     profile_dict["username"] = username
     profile_dict["bio"] = profile[2]
-    profile_dict["color"] = profile[3]
     profile_dict["languages"] = languages
 
     return profile_dict
 
 def update_profile(username, updated_profile):
     # Validates key data before inserting
-    columns = ["image_data", "bio", "profile_color"]
+    columns = ["image_data", "bio"]
 
     for key, value in updated_profile.items():
         if key != "languages" and key in columns:
