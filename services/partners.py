@@ -108,12 +108,15 @@ def get_partners(username):
         return []
     partners_query = text(
         """
-        SELECT u.username, c.id 
+        SELECT u.username, c.id
         FROM language_partners lp 
         JOIN users u ON lp.user_id1 = u.id 
         JOIN chats c ON (lp.user_id1 = c.user1_id AND lp.user_id2 = c.user2_id) 
         OR (lp.user_id1 = c.user2_id AND lp.user_id2 = c.user1_id) 
+        JOIN messages m ON m.chat_id = c.id
         WHERE lp.user_id2 = :user_id AND lp.request_status = 'Accepted'
+        GROUP BY u.username, c.id 
+        ORDER BY MAX(m.timestamp) DESC;
         """
     )
     language_partners = db.session.execute(partners_query, {"user_id": user_id}).fetchall()
