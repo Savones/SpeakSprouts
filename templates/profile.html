@@ -24,10 +24,19 @@
 
     <div class="flex_container profile_container">
         {% for language in profile["languages"] %}
-            <div class="flex_display">
+            <div class="flex_display profile_languages">
                 {{language[2]}}
                 -
-                {{language[1]}}
+                {{language[1]}} 
+                {% if language[1] == "Unspecified" %}
+                    <p class="emoji">&#129300;</p>
+                {% elif language[1] == "Beginner" %}
+                    <p class="emoji">&#128578;</p>
+                {% elif language[1] == "Intermediate" %}
+                    <p class="emoji">&#128513;</p>
+                {% else %}
+                    <p class="emoji">&#128526;</p>
+                {% endif %}
             </div>
         {% endfor %}
     </div>
