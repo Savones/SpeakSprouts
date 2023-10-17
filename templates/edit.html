@@ -4,11 +4,12 @@
     <h1>Edit profile here!</h1>
     <form method="POST" action="/profile?username={{ session.username }}" enctype="multipart/form-data">
         <h3>Choose profile picture</h3>
+        <img class="profile_photo" id="profilePhoto" src="/profile_picture?username={{session['profile_username']}}">
         <label for="file" class="btn button">Select image</label>
-        <input type="file" style="visibility:hidden;" name="file" id="file">
+        <input type="file" style="visibility:hidden;" name="file" id="file" onchange="displayNewFile()">
         <h3>Bio</h2>
-        <textarea type="text" name="bio">{{ profile["bio"] if profile["bio"] != None else ""}}</textarea><br>
-        <h3>Languages</h2>
+            <textarea type="text" name="bio" id="bioTextarea">{{ temp_bio or profile["bio"] or "" }}</textarea><br>
+            <h3>Languages</h2>
         {% for language in profile["languages"] %}
         <div class="flex_display levels_container">
             <p>{{ language[2] }}</p>
@@ -17,18 +18,18 @@
                     {% if level == language[1] %}
                         <a class="button green">{{ language[1] }}</a>
                     {% else %}
-                        <a href="/edit_profile?level={{level}}&id={{language[0]}}" class="button grey">{{ level }}</a>
+                        <a href="#" class="button grey" onclick="updateLink('{{ level }}', '{{ language[0] }}')"> {{ level }}</a>
                     {% endif %}
                 {% endfor %}
             </div>
-            <a href="/edit_profile?deleted={{ language[2] }}"><i class="fa fa-trash"></i></a>
+            <a href="#" onclick="deleteLanguage('{{ language[2] }}')"> <i class="fa fa-trash"></i></a>
         </div>
         {% endfor %}
         <button id="add_language" class="button" type="button">Add language</button>
         <div id="languages_selection" class="hidden">
             <div class="drop_down">
                 {% for item in languages %}
-                    <a href="/edit_profile?language={{ item[0] }}">{{ item[0] }}</a>
+                    <a href="#" onclick="addLanguage('{{ item[0] }}')"> {{ item[0] }}</a>
                 {% endfor %}
             </div>
         </div>
@@ -45,5 +46,41 @@
         const languagesContainer = document.getElementById('languages_selection');
         languagesContainer.classList.toggle('languages_container');
     });
+
+    function displayNewFile() {
+        const fileInput = document.getElementById('file');
+        const profilePhoto = document.getElementById('profilePhoto');
+
+        if (fileInput.files.length > 0) {
+            profilePhoto.src = URL.createObjectURL(fileInput.files[0]);
+            console.log(fileInput.files[0])
+        } else {
+            profilePhoto.src = "/profile_picture?username={{session['profile_username']}}";
+        }
+    }
+
+    function getBioValue() {
+        const bioValue = document.getElementById('bioTextarea').value;
+        return bioValue
+    }
+
+    function updateLink(level, languageId) {
+        const bioValue = document.getElementById('bioTextarea').value;
+        const link = `/edit_profile?level=${level}&id=${languageId}&bio=${encodeURIComponent(bioValue)}`;
+        window.location.href = link;
+    }
+
+    function deleteLanguage(languageName) {
+        const bioValue = document.getElementById('bioTextarea').value;
+        const link = `/edit_profile?deleted=${languageName}&bio=${encodeURIComponent(bioValue)}`;
+        window.location.href = link;
+    }
+
+    function addLanguage(languageName) {
+        const bioValue = document.getElementById('bioTextarea').value;
+        const link = `/edit_profile?language=${languageName}&bio=${encodeURIComponent(bioValue)}`;
+        window.location.href = link;
+    }
+
 </script>
 {% endblock %}

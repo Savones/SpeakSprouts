@@ -141,6 +141,8 @@ def edit_profile():
     language = request.args.get("language")
     level = request.args.get("level")
     language_id = request.args.get("id")
+    temp_bio = request.args.get("bio")
+
     if level and id:
         profiles.update_level(language_id, session["username"], level)
     if language:
@@ -150,7 +152,7 @@ def edit_profile():
     profile_info = profiles.get_profile(session["username"])
     languages = db.get_languages()
     levels = ["Unspecified", "Beginner", "Intermediate", "Fluent"]
-    return render_template("edit.html", profile = profile_info, languages = languages, levels = levels)
+    return render_template("edit.html", profile = profile_info, languages = languages, levels = levels, temp_bio = temp_bio)
 
 @app.route("/sent_request", methods=["GET", "POST"])
 def sent_request():
