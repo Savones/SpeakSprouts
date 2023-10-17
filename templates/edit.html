@@ -1,14 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="flex_container">
+<div class="flex_container edit_container">
     <h1>Edit profile here!</h1>
     <form method="POST" action="/profile?username={{ session.username }}" enctype="multipart/form-data">
         <h3>Choose profile picture</h3>
         <img class="profile_photo" id="profilePhoto" src="/profile_picture?username={{session['profile_username']}}">
-        <label for="file" class="btn button">Select image</label>
-        <input type="file" style="visibility:hidden;" name="file" id="file" onchange="displayNewFile()">
+        <label for="file" class="btn button edit_button">Select image</label>
+        <input type="file" class="hidden" name="file" id="file" onchange="displayNewFile()">
         <h3>Bio</h2>
-            <textarea type="text" name="bio" id="bioTextarea">{{ temp_bio or profile["bio"] or "" }}</textarea><br>
+            <textarea type="text" name="bio" id="bioTextarea">{{ temp_bio or profile["bio"] or "" }}</textarea>
             <h3>Languages</h2>
         {% for language in profile["languages"] %}
         <div class="flex_display levels_container">
@@ -25,7 +25,7 @@
             <a href="#" onclick="deleteLanguage('{{ language[2] }}')"> <i class="fa fa-trash"></i></a>
         </div>
         {% endfor %}
-        <button id="add_language" class="button" type="button">Add language</button>
+        <button id="add_language" class="button edit_button" type="button">Add language</button>
         <div id="languages_selection" class="hidden">
             <div class="drop_down">
                 {% for item in languages %}
