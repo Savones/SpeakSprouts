@@ -72,12 +72,15 @@ def home():
     except:
         find_users = users.all_users(session["username"])
 
-    registration = request.args.get("registration", False)
-
-    partners_info = partners.get_partners(session["username"])
-    message_info = messages.get_latest_messages(partners_info)
-    posts_info = posts.get_posts()
-    return render_template("home.html", chats = message_info, find_users = find_users, posts = posts_info, registration = registration)
+    return render_template(
+        "home.html",
+        chats = messages.get_latest_messages(
+            partners.get_partners(session["username"])
+        ),
+        find_users = find_users,
+        posts = posts.get_posts(),
+        registration = request.args.get("registration", False)
+    )
 
 @app.route("/logout")
 def logout():
@@ -88,19 +91,24 @@ def logout():
 def chat():
     if "username" not in session:
         return redirect("/")
+    if not partners.check_partner(session["username"], request.args.get("username")):
+        return redirect("/home")
     
-    chat_id = messages.get_chat_id(session["username"], request.args.get("username"))    
+    chat_id = messages.get_chat_id(session["username"], request.args.get("username"))
+
     if request.method == "POST":
         if session["csrf_token"] != request.form["csrf_token"]:
             return render_template("error.html")
-        message = request.form["message"]
-        message = str(escape(message)).replace("\r\n", "</br>")
+        message = str(escape(request.form["message"])).replace("\r\n", "</br>")
         messages.save_message(chat_id ,session["username"], message)
+
     sent_messages, sender_id = messages.get_messages(chat_id, session["username"])
-    other = request.args.get("username")
-    if not partners.check_partner(session["username"], other):
-        return redirect("/home")
-    return render_template("chat.html", other_chatter=other, messages=sent_messages, sender = sender_id)
+
+    return render_template(
+        "chat.html",
+        other_chatter = request.args.get("username"),
+        messages = sent_messages,
+        sender = sender_id)
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
@@ -108,7 +116,6 @@ def profile():
         return redirect("/")
     
     session["profile_username"] = request.args.get("username")
-    result = partners.check_partner(session["username"], session["profile_username"])
 
     if request.method == "POST":
         if session["csrf_token"] != request.form["csrf_token"]:
@@ -124,24 +131,26 @@ def profile():
                 updated_profile[key] = value
         profiles.update_profile(session["username"], updated_profile)
 
-    profile_info = profiles.get_profile(session["profile_username"])
-    return render_template("profile.html", profile=profile_info, partner=result)
+    return render_template(
+        "profile.html",
+        profile = profiles.get_profile(session["profile_username"]),
+        partner = partners.check_partner(session["username"], session["profile_username"])
+    )
     
 @app.route('/profile_picture')
 def profile_picture():
-    username = request.args.get("username")
-    data = profiles.get_profile_picture(username)
+    data = profiles.get_profile_picture(request.args.get("username"))
     return send_file(io.BytesIO(data), mimetype='image/jpeg')
 
 @app.route("/edit_profile")
 def edit_profile():
     if "username" not in session:
         return redirect("/")
+    
     deleted = request.args.get("deleted")
     language = request.args.get("language")
     level = request.args.get("level")
     language_id = request.args.get("id")
-    temp_bio = request.args.get("bio")
 
     if level and id:
         profiles.update_level(language_id, session["username"], level)
@@ -149,10 +158,14 @@ def edit_profile():
         profiles.update_language(language, session["username"])
     if deleted:
         profiles.delete_language(deleted, session["username"])
-    profile_info = profiles.get_profile(session["username"])
-    languages = db.get_languages()
-    levels = ["Unspecified", "Beginner", "Intermediate", "Fluent"]
-    return render_template("edit.html", profile = profile_info, languages = languages, levels = levels, temp_bio = temp_bio)
+
+    return render_template(
+        "edit.html",
+        profile = profiles.get_profile(session["username"]),
+        languages = db.get_languages(),
+        levels = ["Unspecified", "Beginner", "Intermediate", "Fluent"],
+        temp_bio = request.args.get("bio")
+    )
 
 @app.route("/sent_request", methods=["GET", "POST"])
 def sent_request():
@@ -169,18 +182,19 @@ def sent_request():
 def users_notifications():
     if "username" not in session:
         return redirect("/")
-    notifications = partners.get_requests(session["username"])
-    return render_template("notifications.html", notifications = notifications)
+    return render_template(
+        "notifications.html",
+        notifications = partners.get_requests(session["username"])
+    )
 
 @app.route("/request_answer")
 def request_answer():
-    answer = request.args.get("answer")
     user_id = request.args.get("id")
     if not user_id:
-        username2 = request.args.get("username")
-        partners.remove_partner(session["username"], username2)
-        return redirect(f"/profile?username={username2}")
-    partners.change_status(session["username"], user_id, answer)
+        other_username = request.args.get("username")
+        partners.remove_partner(session["username"], other_username)
+        return redirect(f"/profile?username={other_username}")
+    partners.change_status(session["username"], user_id, request.args.get("answer"))
     return redirect("/notifications")
 
 @app.route("/open_post")
@@ -199,13 +213,8 @@ def open_post():
 def add_post():
     if session["csrf_token"] != request.form["csrf_token"]:
         return render_template("error.html")
-    title = request.form.get("title")
-    author = session["username"]
-
-    content = request.form.get("content")
-    content = str(escape(content)).replace("\r\n", "</br>")
-
-    posts.add_post(author, title, content)
+    content = str(escape(request.form.get("content"))).replace("\r\n", "</br>")
+    posts.add_post(session["username"], request.form.get("title"), content)
     return redirect("/home")
 
 @app.route("/add_comment", methods=["POST"])
@@ -213,12 +222,8 @@ def add_comment():
     if session["csrf_token"] != request.form["csrf_token"]:
         return render_template("error.html")
     post_id = request.args.get("post_id")
-    author = session["username"]
-
-    content = request.form.get("content")
-    content = str(escape(content)).replace("\r\n", "</br>")
-
-    posts.add_comment(post_id, author, content)
+    content = str(escape(request.form.get("content"))).replace("\r\n", "</br>")
+    posts.add_comment(post_id, session["username"], content)
     return redirect(f"/open_post?id={post_id}")
 
 @app.route("/delete_account")
@@ -227,7 +232,4 @@ def delete_account():
     return redirect("/")
 
 # Most important to-do's:
-    # changing urls, especially to chat?username="name"
-    # test csrf protection
-    # line breaks should be allowed
     # data validation to chats, posts and comments, profile pic and bio
