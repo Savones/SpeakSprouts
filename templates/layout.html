@@ -12,13 +12,13 @@
             {% block buttons %}
             <a href="/home?username={{ session.username }}"><h3 class="nav_logo">SpeakSprouts &#128172</h3></a>
             <li>
-                <a href="/home?username={{ session.username }}"><i class="fa fa-home "></i></a>
-                <a href="/profile?username={{ session.username }}"><i class="fa fa-user "></i></a>
-                <a href="/notifications?username={{ session.username }}"><i class="fa fa-bell "></i></a>
+                <a href="/home?username={{ session.username }}"><i class="fa fa-home " title="Home"></i></a>
+                <a href="/profile?username={{ session.username }}"><i class="fa fa-user " title="My profile"></i></a>
+                <a href="/notifications?username={{ session.username }}"><i class="fa fa-bell " title="Notifications"></i></a>
                 {% if session.notifications > 0 %}
                     <span class="badge">{{ session.notifications }}</span>
                 {% endif %}
-                <a href="/logout"><i class="fas fa-sign-out-alt"></i></a>
+                <a href="/logout"><i class="fas fa-sign-out-alt" title="Logout"></i></a>
             </li>
             {% endblock %}
         </nav>
