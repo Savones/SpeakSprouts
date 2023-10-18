@@ -23,6 +23,7 @@
     </div>
 
     <div class="flex_container profile_container">
+        <h2 class="profile_header">Languages:</h2>
         {% for language in profile["languages"] %}
             <div class="flex_display profile_languages">
                 {{language[2]}}
@@ -37,6 +38,18 @@
                 {% else %}
                     <p class="emoji">&#128526;</p>
                 {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="flex_container profile_container">
+        <h2 class="profile_header">Community posts:</h2>
+        {% for post in posts %}
+            <div class="post_container">
+                <p class="author">@{{ post.author_username }}</p>
+                <h3>{{ post.title }}</h3>
+                <p class="post_content">{{ post.content | safe }}</p>
+                <a href="open_post?id={{ post.id }}" class="button">View post</a>
             </div>
         {% endfor %}
     </div>

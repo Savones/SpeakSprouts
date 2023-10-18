@@ -18,10 +18,15 @@ def get_post_info(post_id):
 
     return post
 
-def get_posts():
+def get_posts(author = None):
     all_posts = []
-    sql = text("SELECT id FROM community_posts ORDER BY id DESC")
-    all_posts_ids = db.session.execute(sql).fetchall()
+    if not author:
+        sql = text("SELECT id FROM community_posts ORDER BY id DESC")
+        all_posts_ids = db.session.execute(sql).fetchall()
+    else:
+        author_id = get_id(author)
+        sql = text("SELECT id FROM community_posts WHERE author_id = :author_id ORDER BY id DESC")
+        all_posts_ids = db.session.execute(sql, {"author_id":author_id}).fetchall()
     for id in all_posts_ids:
         all_posts.append(get_post_info(id[0]))
     return all_posts

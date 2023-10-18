@@ -136,7 +136,8 @@ def profile():
     return render_template(
         "profile.html",
         profile = profiles.get_profile(session["profile_username"]),
-        partner = partners.check_partner(session["username"], session["profile_username"])
+        partner = partners.check_partner(session["username"], session["profile_username"]),
+        posts = posts.get_posts(session["profile_username"])
     )
     
 @app.route('/profile_picture')

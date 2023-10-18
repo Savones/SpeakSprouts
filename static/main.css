@@ -584,3 +584,10 @@ textarea {
     height: min-content;
     font-size: 14px;
 }
+
+.profile_header {
+    align-self: flex-start;
+    margin: 0;
+    color: var(--neon-lilac);
+    margin-bottom: 20px;
+}
