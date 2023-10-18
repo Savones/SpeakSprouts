@@ -37,22 +37,22 @@ def save_message(chat_id, sender_username, message):
     timestamp = datetime.now()
 
     insert_message = text(
-            "INSERT INTO messages (chat_id, sender_id, message_text, timestamp) VALUES (:chat_id, :sender_id, :message_text, :timestamp)"
+            "INSERT INTO messages (chat_id, sender_id, message_text, timestamp, status) VALUES (:chat_id, :sender_id, :message_text, :timestamp, :status)"
         )
     
     db.session.execute(
-            insert_message, {"chat_id":chat_id, "sender_id":sender_id, "message_text":message, "timestamp":timestamp}
+            insert_message, {"chat_id":chat_id, "sender_id":sender_id, "message_text":message, "timestamp":timestamp, "status":"Unread"}
         )
     db.session.commit()
 
 def get_messages(chat_id, username):
     sender_id = get_id(username)
 
-    messages_query = text("SELECT message_text, sender_id, timestamp FROM messages WHERE chat_id = :chat_id")
+    messages_query = text("SELECT message_text, sender_id, timestamp FROM messages WHERE chat_id = :chat_id ORDER BY timestamp")
     messages = db.session.execute(messages_query, {"chat_id": chat_id})
     return messages, sender_id
 
-def query_latest_messages(chat_ids, partners_info):
+def query_latest_messages(chat_ids, partners_info, username):
     latest_messages = []
     for i, chat_id in enumerate(chat_ids):
         message = {}
@@ -70,12 +70,45 @@ def query_latest_messages(chat_ids, partners_info):
         if latest_message:
             message["message"] = latest_message[0]
             message["sender_username"] = latest_message[1]
+        message["unread_count"] = get_unread_count(chat_id, username) 
         message["partner_username"] = partners_info[i][0]
         message["partner_id"] = partners_info[i][1]
         latest_messages.append(message)
     return latest_messages
 
-def get_latest_messages(partners_info):
+def get_latest_messages(partners_info, username):
     partners_chat_ids = [id[1] for id in partners_info]
-    latest_messages = query_latest_messages(partners_chat_ids, partners_info)
+    latest_messages = query_latest_messages(partners_chat_ids, partners_info, username)
     return latest_messages
+
+def get_unread_count(chat_id, sender_username):
+    sender_id = get_id(sender_username)
+    unread_count_query = text(
+            """
+            SELECT COUNT(messages)  
+            FROM messages 
+            JOIN chats ON messages.chat_id = chats.id 
+            WHERE chats.id = :chat_id AND messages.status = :status AND messages.sender_id <> :sender_id
+            """
+        )
+    unread_count = db.session.execute(
+        unread_count_query, {"chat_id": chat_id, "status": "Unread", "sender_id": sender_id}
+    ).scalar()
+    return unread_count
+
+def message_read(chat_id, username):
+    receiver_id = get_id(username)
+    update_read_query = text(
+            """
+            UPDATE messages  
+            SET status = 'Read' 
+            FROM chats 
+            WHERE messages.chat_id = chats.id 
+            AND chats.id = :chat_id 
+            AND messages.sender_id <> :sender_id;
+            """
+        )
+    db.session.execute(
+        update_read_query, {"chat_id": chat_id, "sender_id": receiver_id}
+    )
+    db.session.commit()

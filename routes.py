@@ -71,11 +71,11 @@ def home():
         find_users = users.search_users(request.args["query"])
     except:
         find_users = users.all_users(session["username"])
-
+        
     return render_template(
         "home.html",
         chats = messages.get_latest_messages(
-            partners.get_partners(session["username"])
+            partners.get_partners(session["username"]), session["username"]
         ),
         find_users = find_users,
         posts = posts.get_posts(),
@@ -101,6 +101,8 @@ def chat():
             return render_template("error.html")
         message = str(escape(request.form["message"])).replace("\r\n", "</br>")
         messages.save_message(chat_id ,session["username"], message)
+    else:
+        messages.message_read(chat_id, session["username"])
 
     sent_messages, sender_id = messages.get_messages(chat_id, session["username"])
 
