@@ -4,6 +4,14 @@
 <div class="main_container">
     <div class="chats_container">
         <h2>Your chats</h2>
+        {% if not chats %}
+            <ol class="info_list">
+                <h3>You can only chat with language partners.</h3>
+                <li class="ol_list">Find a user you would like to chat with.</li>
+                <li class="ol_list">Go to their profile and send a request message. The message will appear in their notifications.</li>
+                <li class="ol_list">Once they accept the chat opens, and you can access it here or from their profile.</li>
+            </ol>
+        {% endif %}
         {% for chat in chats %}
         <div class="chat_box">
             <div class="user_links">
