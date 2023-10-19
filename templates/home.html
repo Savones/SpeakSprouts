@@ -17,7 +17,7 @@
             <div class="user_links">
                 <h3 class="username">@{{ chat.partner_username }}</h3>
                 {% if chat.unread_count > 0 %}
-                    <span class="unread_badge">{{ chat.unread_count }} Unread</span>
+                    <a href="/chat?username={{ chat.partner_username }}" class="unread_badge">{{ chat.unread_count }} Unread</a>
                 {% endif %}
                 <a href="/profile?username={{ chat.partner_username }}"><i class="fa fa-user icon"></i></a>
             </div>
