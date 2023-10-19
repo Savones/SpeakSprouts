@@ -16,7 +16,7 @@
                 <a href="/profile?username={{ session.username }}"><i class="fa fa-user " title="My profile"></i></a>
                 <a href="/notifications?username={{ session.username }}"><i class="fa fa-bell " title="Notifications"></i></a>
                 {% if session.notifications > 0 %}
-                    <span class="badge">{{ session.notifications }}</span>
+                    <a href="/notifications?username={{ session.username }}" class="badge">{{ session.notifications }}</a>
                 {% endif %}
                 <a href="/logout"><i class="fas fa-sign-out-alt" title="Logout"></i></a>
             </li>
