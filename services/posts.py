@@ -21,11 +21,11 @@ def get_post_info(post_id):
 def get_posts(author = None):
     all_posts = []
     if not author:
-        sql = text("SELECT id FROM community_posts ORDER BY id DESC")
+        sql = text("SELECT id FROM community_posts ORDER BY created_at DESC")
         all_posts_ids = db.session.execute(sql).fetchall()
     else:
         author_id = get_id(author)
-        sql = text("SELECT id FROM community_posts WHERE author_id = :author_id ORDER BY id DESC")
+        sql = text("SELECT id FROM community_posts WHERE author_id = :author_id ORDER BY created_at DESC")
         all_posts_ids = db.session.execute(sql, {"author_id":author_id}).fetchall()
     for id in all_posts_ids:
         all_posts.append(get_post_info(id[0]))
@@ -45,7 +45,7 @@ def add_comment(post_id, author, content):
 
 def get_comments(post_id):
     all_comments = []
-    sql = text("SELECT id FROM post_comments WHERE post_id = :post_id ORDER BY id DESC")
+    sql = text("SELECT id FROM post_comments WHERE post_id = :post_id ORDER BY timestamp DESC")
     all_comment_ids = db.session.execute(sql, {"post_id": post_id}).fetchall()
     for comment_id in all_comment_ids:
         all_comments.append(get_comment_info(comment_id[0]))
