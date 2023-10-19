@@ -36,7 +36,7 @@ CREATE TABLE language_levels (
 
 CREATE TABLE profiles (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id) ON DELETE CASCADE UNIQUE,
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
     bio TEXT,
     image_data BYTEA
 );

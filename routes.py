@@ -27,7 +27,7 @@ def after_request(response):
 @app.route("/")
 def index():
     db.read_json()
-    testing.create_dummy_users()
+    testing.populate_database()
     return render_template("index.html")
 
 @app.route("/login", methods=["GET", "POST"])
@@ -97,7 +97,7 @@ def chat():
     chat_id = messages.get_chat_id(session["username"], request.args.get("username"))
 
     if request.method == "POST":
-        if session["csrf_token"] != request.form["csrf_token"]:
+        if session["csrf_token"] != request.form.get("csrf_token"):
             return render_template("error.html")
         message = str(escape(request.form["message"])).replace("\r\n", "</br>")
         messages.save_message(chat_id ,session["username"], message)
