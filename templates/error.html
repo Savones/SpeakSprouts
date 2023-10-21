@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 {% block buttons %}{% endblock %}
 {% block content %}
-    <p>Something went wrong!</p>
+    <div class="flex_container">
+        <p>Oops... something went wrong!</p>
+        {% if hint %}
+            <p>Hint: {{ hint }}</p>
+        {% endif %}
+    </div>
 {% endblock %}

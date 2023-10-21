@@ -56,7 +56,10 @@ def register():
         if not re["username"].match(request.form["username"]) \
                 or not re["password"].match(request.form["password"]) \
                 or not request.form["password"] == request.form["confirm_password"]:
-            return render_template("error.html")
+            return render_template(
+                "error.html",
+                hint="Username or password doesn't meet the requirements."
+            )
 
         username = request.form["username"]
         password = request.form["password"]
@@ -108,11 +111,19 @@ def chat():
         session["username"], request.args.get("username"))
 
     if request.method == "POST":
+
         if session["csrf_token"] != request.form.get("csrf_token"):
-            return render_template("error.html")
+            return render_template(
+                "error.html",
+                hint="CSRF token mismatch."
+            )
+
         message = str(escape(request.form["message"])).replace("\r\n", "</br>")
         if len(message) > 1000:
-            return render_template("error.html")
+            return render_template(
+                "error.html",
+                hint="Message can have max 1000 characters."
+            )
         messages.save_message(chat_id, session["username"], message)
     else:
         messages.message_read(chat_id, session["username"])
@@ -136,12 +147,18 @@ def profile():
 
     if request.method == "POST":
         if session["csrf_token"] != request.form["csrf_token"]:
-            return render_template("error.html")
+            return render_template(
+                "error.html",
+                hint="CSRF token mismatch."
+            )
         file = request.files["file"]
         if file:
             profiles.add_profile_picture(file)
         if len(request.form.get("bio")) > 1000:
-            return render_template("error.html")
+            return render_template(
+                "error.html",
+                hint="Bio can have max 1000 characters."
+            )
         updated_profile = {}
         for key, value in request.form.items():
             if key == "languages":
@@ -245,11 +262,17 @@ def open_post():
 @app.route("/add_post", methods=["POST"])
 def add_post():
     if session["csrf_token"] != request.form["csrf_token"]:
-        return render_template("error.html")
+        return render_template(
+            "error.html",
+            hint="CSRF token mismatch."
+        )
     content = str(escape(request.form.get("content"))).replace("\r\n", "</br>")
     title = request.form.get("title")
     if len(content) > 2000 or len(title) > 150:
-        return render_template("error.html")
+        return render_template(
+            "error.html",
+            hint="Title can be max 150 characters and the content max 2000."
+        )
     posts.add_post(session["username"], title, content)
     return redirect("/home")
 
@@ -257,11 +280,17 @@ def add_post():
 @app.route("/add_comment", methods=["POST"])
 def add_comment():
     if session["csrf_token"] != request.form["csrf_token"]:
-        return render_template("error.html")
+        return render_template(
+            "error.html",
+            hint="CSRF token mismatch."
+        )
     post_id = request.args.get("post_id")
     content = str(escape(request.form.get("content"))).replace("\r\n", "</br>")
     if len(content) > 1000:
-        return render_template("error.html")
+        return render_template(
+            "error.html",
+            hint="Comment can have max 1000 characters."
+        )
     posts.add_comment(post_id, session["username"], content)
     return redirect(f"/open_post?id={post_id}")
 
