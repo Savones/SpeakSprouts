@@ -6,8 +6,7 @@ from services.mod import get_id
 
 def login(username, password):
     sql = text("SELECT id, password FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    user = result.fetchone()
+    user = db.session.execute(sql, {"username": username}).fetchone()
     if user:
         hash_value = user.password
         if check_password_hash(hash_value, password):
@@ -17,8 +16,7 @@ def login(username, password):
 
 def register(username, password):
     sql = text("SELECT id, password FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username": username})
-    user = result.fetchone()
+    user = db.session.execute(sql, {"username": username}).fetchone()
     if not user:
         create_user(username, password)
         add_profile(username)

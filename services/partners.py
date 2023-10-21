@@ -10,11 +10,17 @@ def request_sent(sender_name, receiver_name, message):
     receiver_id = get_id(receiver_name)
 
     partner_id_query = text(
-        "SELECT id FROM language_partners WHERE user_id1 = :user_id1 AND user_id2 = :user_id2 FOR UPDATE"
+        """
+        SELECT id FROM language_partners
+        WHERE user_id1 = :user_id1 AND user_id2 = :user_id2 FOR UPDATE
+        """
     )
 
     partner_id = db.session.execute(
-        partner_id_query, {"user_id1": sender_id, "user_id2": receiver_id}
+        partner_id_query, {
+            "user_id1": sender_id,
+            "user_id2": receiver_id
+        }
     ).scalar()
 
     if partner_id is None:
@@ -28,13 +34,15 @@ def request_sent(sender_name, receiver_name, message):
             """
         )
         db.session.execute(
-            update_status_query, {"partner_id": partner_id, "message": message}
+            update_status_query, {
+                "partner_id": partner_id,
+                "message": message
+            }
         )
         db.session.commit()
 
 
 def add_request(sender_id, receiver_id, message):
-    status = "Pending"
     insert_partner = text(
         """
             INSERT INTO language_partners (user_id1, user_id2, request_status, request_message) 
@@ -42,15 +50,17 @@ def add_request(sender_id, receiver_id, message):
             """
     )
     db.session.execute(
-        insert_partner, {"user_id1": sender_id,
-                         "user_id2": receiver_id, "status": status, "message": message}
+        insert_partner, {
+            "user_id1": sender_id,
+            "user_id2": receiver_id,
+            "status": "Pending",
+            "message": message
+        }
     )
     db.session.commit()
 
 
 def get_requests(username):
-    user_id = get_id(username)
-
     notifs_query = text(
         "SELECT lp.user_id1, u.username, lp.request_message "
         "FROM language_partners lp "
@@ -58,7 +68,11 @@ def get_requests(username):
         "WHERE lp.request_status = :status AND lp.user_id2 = :user_id2"
     )
     notifs = db.session.execute(
-        notifs_query, {"user_id2": user_id, "status": "Pending"}).fetchall()
+        notifs_query, {
+            "user_id2": get_id(username),
+            "status": "Pending"
+        }
+    ).fetchall()
     return notifs
 
 
@@ -66,7 +80,10 @@ def change_status(username, user_id2, answer):
     user_id1 = get_id(username)
 
     exists_query = text(
-        "SELECT EXISTS (SELECT 1 FROM language_partners WHERE (user_id1 = :user_id1 AND user_id2 = :user_id2))"
+        """
+        SELECT EXISTS (SELECT 1 FROM language_partners
+        WHERE (user_id1 = :user_id1 AND user_id2 = :user_id2))
+        """
     )
     row_exists = db.session.execute(
         exists_query, {"user_id1": user_id1, "user_id2": user_id2}).scalar()
@@ -144,8 +161,6 @@ def check_partner(username, check_username):
 
 
 def get_non_partners(username):
-    user_id = get_id(username)
-
     non_partners_query = text(
         """
         SELECT username FROM users WHERE id NOT IN 
@@ -155,23 +170,27 @@ def get_non_partners(username):
         """
     )
     non_partners = db.session.execute(
-        non_partners_query, {"user_id": user_id}).fetchall()
+        non_partners_query, {
+            "user_id": get_id(username)
+        }
+    ).fetchall()
     return non_partners
 
 
 def remove_partner(username, username2):
-    user2_id = get_id(username2)
-    change_status(username, user2_id, "rejected")
+    change_status(username, get_id(username2), "rejected")
 
 
 def notification_count(username):
-    user_id = get_id(username)
-
     notifs_query = text(
         "SELECT COUNT(*) "
         "FROM language_partners lp "
         "WHERE lp.request_status = :status AND lp.user_id2 = :user_id2"
     )
     notifs_count = db.session.execute(
-        notifs_query, {"user_id2": user_id, "status": "Pending"}).scalar()
+        notifs_query, {
+            "user_id2": get_id(username),
+            "status": "Pending"
+        }
+    ).scalar()
     return notifs_count

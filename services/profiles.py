@@ -62,15 +62,20 @@ def update_language(language_name, username):
 
 
 def delete_language(language_name, username):
-    user_id = get_id(username)
-    query = text(
+    language_query = text(
         "SELECT id FROM languages WHERE language_name = :language_name")
-    language = db.session.execute(
-        query, {"language_name": language_name}).scalar()
     sql = text(
-        """DELETE FROM language_levels WHERE language_id =:language_id AND user_id =:user_id"""
+        """
+        DELETE FROM language_levels
+        WHERE language_id =:language_id AND user_id =:user_id
+        """
     )
-    db.session.execute(sql, {"user_id": user_id, "language_id": language})
+    db.session.execute(sql, {
+        "user_id": get_id(username),
+        "language_id": db.session.execute(
+            language_query, {"language_name": language_name}).scalar()
+    }
+    )
     db.session.commit()
 
 
@@ -102,6 +107,5 @@ def get_profile_picture(username):
         "SELECT image_data FROM profiles "
         "JOIN users ON profiles.user_id = users.id "
         "WHERE users.username = :username")
-    result = db.session.execute(sql, {"username": username})
-    data = result.fetchone()[0]
+    data = db.session.execute(sql, {"username": username}).fetchone()[0]
     return data
