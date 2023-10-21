@@ -3,17 +3,21 @@
 
 <div class="notifs_view">
     <h1>Your notifications</h1>
-    <h3>Language partner requests:</h3>
-    {% for notification in notifications %}
-    <div class="notif_container">
-        <p>@{{ notification[1] }}:</p>
-        <p class="notif_message">{{ notification[2] }}</p>
-        <div class="flex_display">
-            <a href="/request_answer?answer=rejected&id={{ notification[0] }}" class="button red">Deny</a>
-            <a href="/request_answer?answer=accepted&id={{ notification[0] }}" class="button green">Accept</a>
-        </div>
-    </div>
+    {% if not notifications %}
+        <p>You don't currently have any notifications.</p>
+    {% else %}
+        <h3>Language partner requests:</h3>
+        {% for notification in notifications %}
+            <div class="notif_container">
+                <p>@{{ notification[1] }}:</p>
+                <p class="notif_message">{{ notification[2] }}</p>
+                <div class="flex_display">
+                    <a href="/request_answer?answer=rejected&id={{ notification[0] }}" class="button red">Deny</a>
+                    <a href="/request_answer?answer=accepted&id={{ notification[0] }}" class="button green">Accept</a>
+                </div>
+            </div>
     {% endfor %}
+    {% endif %}
 </div>
 
 {% endblock %}

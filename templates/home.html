@@ -28,7 +28,7 @@
                     <p class="latest_message"> {{ chat.message | safe  }}</p>
                 </div>
                 {% else %}
-                    <p class="latest_message">Chat with {{ chat.partner_username }}!</p>
+                    <p class="latest_message">Start a chat with {{ chat.partner_username }}!</p>
                 {% endif %}
                 <a href="/chat?username={{ chat.partner_username }}"><i class="fa fa-comments icon blue"></i></a>
             </div>
