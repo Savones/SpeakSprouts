@@ -61,8 +61,22 @@ def all_users(username):
     return result
 
 
-def search_users(search: str):
+def search_users(search: str, username):
+    found = True
     sql = text(
-        "SELECT username FROM users WHERE UPPER(username) LIKE '%' || :search || '%'")
-    all_users = db.session.execute(sql, {"search": search.upper()}).fetchall()
-    return all_users
+        """
+        SELECT username
+        FROM users
+        WHERE UPPER(username) LIKE '%' || :search || '%'
+        AND username !=:username
+        """
+    )
+    users = db.session.execute(sql, {
+        "search": search.upper(),
+        "username": username
+    }
+    ).fetchall()
+    if not users:
+        users = all_users(username)
+        found = False
+    return users, found

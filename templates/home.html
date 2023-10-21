@@ -60,6 +60,9 @@
                 </button>
             </div>
         </form>
+        {% if not found %}
+            <p>No results found.</p>
+        {% endif %}
         <div class="flex_container find_users">
             {% for user in find_users %}
             <div class="user_links brown">

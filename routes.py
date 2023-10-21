@@ -74,7 +74,8 @@ def home():
     if "username" not in session:
         return redirect("/")
     try:
-        find_users = users.search_users(request.args["query"])
+        find_users, found = users.search_users(
+            request.args["query"], session["username"])
     except:
         find_users = users.all_users(session["username"])
 
@@ -84,6 +85,7 @@ def home():
             partners.get_partners(session["username"]), session["username"]
         ),
         find_users=find_users,
+        found=found if "found" in locals() else True,
         posts=posts.get_posts(),
         registration=request.args.get("registration", False)
     )
