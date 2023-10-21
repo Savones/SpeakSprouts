@@ -2,10 +2,10 @@
 
 A platform for language learners to connect with each other and practice languages by chatting and interacting with community posts. Users can create profiles and find language partners.
 
-- # please-note
-- # current-functionalities
-- # known-issues
-- # instructions-for-testing
+- #please-note
+- #current-functionalities
+- #known-issues
+- #instructions-for-testing
 
 ### Please note
 The latest version of this app is running at a friends 
