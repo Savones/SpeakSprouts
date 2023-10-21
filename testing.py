@@ -2,6 +2,7 @@ from sqlalchemy.sql import text
 from db import db
 from services import users
 
+
 def populate_database():
     sql = text("SELECT * FROM Users")
     result = db.session.execute(sql).fetchall()
@@ -171,5 +172,4 @@ def populate_database():
         """
     )
     db.session.execute(comments_query)
-
     db.session.commit()

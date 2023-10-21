@@ -18,17 +18,21 @@ re = {
     'request': re.compile(r"^.{0,150}$", re.DOTALL),
 }
 
+
 @app.after_request
 def after_request(response):
-    session["notifications"] = partners.notification_count(session["username"]) if "username" in session else 0
+    session["notifications"] = partners.notification_count(
+        session["username"]) if "username" in session else 0
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     return response
+
 
 @app.route("/")
 def index():
     db.read_json()
     testing.populate_database()
     return render_template("index.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -42,15 +46,16 @@ def login():
         success = False
     else:
         success = True
-    return render_template("login.html", login = success)
+    return render_template("login.html", login=success)
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         global re
         if not re["username"].match(request.form["username"]) \
-        or not re["password"].match(request.form["password"]) \
-        or not request.form["password"] == request.form["confirm_password"]:
+                or not re["password"].match(request.form["password"]) \
+                or not request.form["password"] == request.form["confirm_password"]:
             return render_template("error.html")
 
         username = request.form["username"]
@@ -61,7 +66,8 @@ def register():
         success = False
     else:
         success = True
-    return render_template("register.html", registration = success)
+    return render_template("register.html", registration=success)
+
 
 @app.route("/home")
 def home():
@@ -71,21 +77,23 @@ def home():
         find_users = users.search_users(request.args["query"])
     except:
         find_users = users.all_users(session["username"])
-        
+
     return render_template(
         "home.html",
-        chats = messages.get_latest_messages(
+        chats=messages.get_latest_messages(
             partners.get_partners(session["username"]), session["username"]
         ),
-        find_users = find_users,
-        posts = posts.get_posts(),
-        registration = request.args.get("registration", False)
+        find_users=find_users,
+        posts=posts.get_posts(),
+        registration=request.args.get("registration", False)
     )
+
 
 @app.route("/logout")
 def logout():
     del session["username"]
     return redirect("/")
+
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
@@ -93,30 +101,33 @@ def chat():
         return redirect("/")
     if not partners.check_partner(session["username"], request.args.get("username")):
         return redirect("/home")
-    
-    chat_id = messages.get_chat_id(session["username"], request.args.get("username"))
+
+    chat_id = messages.get_chat_id(
+        session["username"], request.args.get("username"))
 
     if request.method == "POST":
         if session["csrf_token"] != request.form.get("csrf_token"):
             return render_template("error.html")
         message = str(escape(request.form["message"])).replace("\r\n", "</br>")
-        messages.save_message(chat_id ,session["username"], message)
+        messages.save_message(chat_id, session["username"], message)
     else:
         messages.message_read(chat_id, session["username"])
 
-    sent_messages, sender_id = messages.get_messages(chat_id, session["username"])
+    sent_messages, sender_id = messages.get_messages(
+        chat_id, session["username"])
 
     return render_template(
         "chat.html",
-        other_chatter = request.args.get("username"),
-        messages = sent_messages,
-        sender = sender_id)
+        other_chatter=request.args.get("username"),
+        messages=sent_messages,
+        sender=sender_id)
+
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
     if "username" not in session:
         return redirect("/")
-    
+
     session["profile_username"] = request.args.get("username")
 
     if request.method == "POST":
@@ -128,28 +139,32 @@ def profile():
         updated_profile = {}
         for key, value in request.form.items():
             if key == "languages":
-                updated_profile[key] = json.dumps(request.form.getlist("languages"))
+                updated_profile[key] = json.dumps(
+                    request.form.getlist("languages"))
             else:
                 updated_profile[key] = value
         profiles.update_profile(session["username"], updated_profile)
 
     return render_template(
         "profile.html",
-        profile = profiles.get_profile(session["profile_username"]),
-        partner = partners.check_partner(session["username"], session["profile_username"]),
-        posts = posts.get_posts(session["profile_username"])
+        profile=profiles.get_profile(session["profile_username"]),
+        partner=partners.check_partner(
+            session["username"], session["profile_username"]),
+        posts=posts.get_posts(session["profile_username"])
     )
-    
+
+
 @app.route('/profile_picture')
 def profile_picture():
     data = profiles.get_profile_picture(request.args.get("username"))
     return send_file(io.BytesIO(data), mimetype='image/jpeg')
 
+
 @app.route("/edit_profile")
 def edit_profile():
     if "username" not in session:
         return redirect("/")
-    
+
     deleted = request.args.get("deleted")
     language = request.args.get("language")
     level = request.args.get("level")
@@ -164,11 +179,12 @@ def edit_profile():
 
     return render_template(
         "edit.html",
-        profile = profiles.get_profile(session["username"]),
-        languages = db.get_languages(),
-        levels = ["Unspecified", "Beginner", "Intermediate", "Fluent"],
-        temp_bio = request.args.get("bio")
+        profile=profiles.get_profile(session["username"]),
+        languages=db.get_languages(),
+        levels=["Unspecified", "Beginner", "Intermediate", "Fluent"],
+        temp_bio=request.args.get("bio")
     )
+
 
 @app.route("/sent_request", methods=["GET", "POST"])
 def sent_request():
@@ -178,8 +194,10 @@ def sent_request():
     global re
     if not re["request"].match(message):
         return render_template("error.html")
-    partners.request_sent(session["username"], session["profile_username"], message)
+    partners.request_sent(session["username"],
+                          session["profile_username"], message)
     return redirect("/home")
+
 
 @app.route("/notifications")
 def users_notifications():
@@ -187,8 +205,9 @@ def users_notifications():
         return redirect("/")
     return render_template(
         "notifications.html",
-        notifications = partners.get_requests(session["username"])
+        notifications=partners.get_requests(session["username"])
     )
+
 
 @app.route("/request_answer")
 def request_answer():
@@ -197,8 +216,10 @@ def request_answer():
         other_username = request.args.get("username")
         partners.remove_partner(session["username"], other_username)
         return redirect(f"/profile?username={other_username}")
-    partners.change_status(session["username"], user_id, request.args.get("answer"))
+    partners.change_status(session["username"],
+                           user_id, request.args.get("answer"))
     return redirect("/notifications")
+
 
 @app.route("/open_post")
 def open_post():
@@ -210,7 +231,8 @@ def open_post():
     if post_id != "None":
         post_info = posts.get_post_info(post_id)
         post_comments = posts.get_comments(post_id)
-    return render_template("post.html", post = post_info, comments = post_comments)
+    return render_template("post.html", post=post_info, comments=post_comments)
+
 
 @app.route("/add_post", methods=["POST"])
 def add_post():
@@ -220,6 +242,7 @@ def add_post():
     posts.add_post(session["username"], request.form.get("title"), content)
     return redirect("/home")
 
+
 @app.route("/add_comment", methods=["POST"])
 def add_comment():
     if session["csrf_token"] != request.form["csrf_token"]:
@@ -228,6 +251,7 @@ def add_comment():
     content = str(escape(request.form.get("content"))).replace("\r\n", "</br>")
     posts.add_comment(post_id, session["username"], content)
     return redirect(f"/open_post?id={post_id}")
+
 
 @app.route("/delete_account")
 def delete_account():

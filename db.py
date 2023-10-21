@@ -5,14 +5,14 @@ from app import app
 
 db = SQLAlchemy(app)
 
+
 def read_json():
-    # Adds the languages from json file to languages table in db
     with open('datasets/languages.json', 'r') as file:
         data = json.load(file)
 
     sql = text(
-                "SELECT * FROM languages"
-            )
+        "SELECT * FROM languages"
+    )
     result = db.session.execute(sql).scalar()
     if not result:
         for item in data:
@@ -24,10 +24,11 @@ def read_json():
                 VALUES (:language_name, :native_name, :iso_639_1_code)"""
             )
             db.session.execute(sql, {
-                "language_name":language_name, "native_name":native_name, "iso_639_1_code":iso_639_1_code
-                })
+                "language_name": language_name, "native_name": native_name, "iso_639_1_code": iso_639_1_code
+            })
     db.session.commit()
-        
+
+
 def get_languages():
     sql = text("SELECT language_name FROM languages ORDER BY language_name")
     languages = db.session.execute(sql).fetchall()

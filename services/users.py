@@ -1,11 +1,12 @@
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
 from db import db
-from services.mod import get_id 
+from services.mod import get_id
+
 
 def login(username, password):
     sql = text("SELECT id, password FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username":username})
+    result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
     if user:
         hash_value = user.password
@@ -13,9 +14,10 @@ def login(username, password):
             return True
     return False
 
+
 def register(username, password):
     sql = text("SELECT id, password FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username":username})
+    result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
     if not user:
         create_user(username, password)
@@ -23,11 +25,14 @@ def register(username, password):
         return True
     return False
 
+
 def create_user(username, password):
     hash_value = generate_password_hash(password)
-    sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
-    db.session.execute(sql, {"username":username, "password":hash_value})
+    sql = text(
+        "INSERT INTO users (username, password) VALUES (:username, :password)")
+    db.session.execute(sql, {"username": username, "password": hash_value})
     db.session.commit()
+
 
 def add_profile(username):
     user_id = get_id(username)
@@ -35,6 +40,7 @@ def add_profile(username):
                VALUES (:user_id, :user_id)""")
     db.session.execute(sql, {"user_id": user_id})
     db.session.commit()
+
 
 def delete_user(username):
     user_id = get_id(username)
@@ -50,12 +56,15 @@ def delete_user(username):
     else:
         return False
 
+
 def all_users(username):
     sql = text("SELECT username FROM users WHERE username !=:username")
-    result = db.session.execute(sql, {"username":username})
+    result = db.session.execute(sql, {"username": username})
     return result
 
+
 def search_users(search: str):
-    sql = text("SELECT username FROM users WHERE UPPER(username) LIKE '%' || :search || '%'")
-    all_users = db.session.execute(sql, {"search":search.upper()}).fetchall()
+    sql = text(
+        "SELECT username FROM users WHERE UPPER(username) LIKE '%' || :search || '%'")
+    all_users = db.session.execute(sql, {"search": search.upper()}).fetchall()
     return all_users
