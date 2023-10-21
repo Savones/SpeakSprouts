@@ -1,6 +1,11 @@
-# SpeakSprouts
+# SpeakSprouts - a language learning community
 
-A platform for language learners to connect with each other and practice languages by chatting. Users can create profiles and find language partners.
+A platform for language learners to connect with each other and practice languages by chatting and interacting with community posts. Users can create profiles and find language partners.
+
+- # please-note
+- # current-functionalities
+- # known-issues
+- # instructions-for-testing
 
 ### Please note
 The latest version of this app is running at a friends 
@@ -9,63 +14,45 @@ code only affects the automation and not the content of the app itself.
 So please note that the merged files should not be part of my grading.
 You can view all of these changes [here](https://github.com/Savones/SpeakSprouts/pull/1).
 
-## Requirements for the finished project
-
-### Profiles
-
-A profile should include an username, known languages and language levels, a profile picture, bio and a chosen color for the profile background.
-
-
-### Functionalities
-
-Functionalities for users:
-- user can login, logout, make a new account and delete their account
-- user can edit their own profile
-- user can view their or other users profile
-- user can search for other users (based on languages or usernames)
-- user can start a chat with another user if they are language partners
-- user can request to be another users language partner
-- user can accept or deny a request from another user to be their language partner
-- user can block another user or just remove them as a partner
-- user can add a review on a language partners profile
-- user can make community posts and comment or like other peoples posts
-
-
 ## Current functionalities
 
 ### Profiles
 
-- login,logout and registeration are done
-- can view own profile and other peoples profiles
-- own profile can be edited
-- profile editing still has some bugs and some more profile info to be added
+- user can login, logout, make a new account and delete their account
+- user can edit their profile by changing their profile picture, bio and the list of languages they know and how well they know them
+- a profile includes the community posts a user has made
+- user can view other peoples profiles
+- user can search for other users from the home page
 
 ### Language partners
 
-- a request to a user to become language partners can be sent from the other users profile
-- a user can write a message to go along the request
-- if two people are already language partners the send request button won't show up, instead the remove partner and open chat will
+- a request to another user to become language partners can be sent from the other users profile
+- a user can write a message to go along with the request
+- if two people are already language partners the "send request" button won't show up, instead the "remove" partner and "open chat" will
 - partner connection can be removed by clicking the remove button in their profile
 - requests sent to a user can be found in notifications page by clicking the bell icon at top-right
 - user can accept or deny requests sent to them, and also view the request messages
+- accepting a request opens a chat between the language partners
 
 ### Chats
 
 - user can chat only with people they are language partners with
-- chats can be accessed from main page on the left side by clicking the chat icon under a username
-- every chat sent gets saved to database, old chat messages can be viewed by scrolling
-- dates and times that chats were sent are also showing
+- chats can be accessed from on the left side of the home page by clicking the chat icon under an username, or from another users profile
+- every message sent gets saved to database, old chat messages can be viewed by scrolling
+- dates and times the chats were sent are displayd on the chat
+- the latest message sent in every chat is displayed on the home page
+- the order of chats is that the latest chat interaction is at the top, also the amount of unread messages is displayed for each chat
 
 ### Community posts
 
-- all posts can be viewed from the home page and clicked open with the view post button
+- all posts can be viewed from the home page and clicked open with the "view post" button
 - a new post can be made by clicking the add post button in home page
 - users can leave comments under posts
+- users community posts are displayed on their profile
 
 ## Known issues
 
-- When editing your profile if you change a language related information, your bio and profile picture changes disappear (to avoid: change language info, then other info before saving)
-- Data validating is still missing from some places, for example any sized profile picture can be added currently
+- When editing your profile if you first choose a profile image and then change language related information, the new profile image turns back to the old one. This is due to a poor editing page design and the lack of time to change it. This bug can be avoided by either saving the image before changing the language options or by first changing the languages and then the image.
 
 ## Instructions for testing
 
@@ -78,11 +65,11 @@ SECRET_KEY=<your-secret-key>
 
 ### Recommendations for testing
 
-For testing purposes I have added 10 dummy users to the database when the program is first ran.
+When the program is first ran the database is populated with 20 fake users to make testing easier.
 I recommend that you first register a new account and then send a language partner
-request to a dummy user by going to their profile. Then logout and login to that dummy account (username and password are the same)
+request to a fake user by going to their profile. Then logout and login to that fake account (username and password are the same)
  and accept the partner request by going to the notifications (bell icon in top-right).
-By doing this you can test the chatting feature, since chatting is only possible with language partners.
+By doing this you are able to test the chatting feature, since chatting is only possible with language partners.
 
 ### Commands
 
