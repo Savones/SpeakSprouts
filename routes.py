@@ -15,7 +15,7 @@ from services import partners
 re = {
     'username': re.compile(r"^\w{3,12}$"),
     'password': re.compile(r"^.{6,24}$"),
-    'request': re.compile(r"^.{0,150}$", re.DOTALL),
+    'request': re.compile(r"^.{0,150}$", re.DOTALL)
 }
 
 
@@ -111,6 +111,8 @@ def chat():
         if session["csrf_token"] != request.form.get("csrf_token"):
             return render_template("error.html")
         message = str(escape(request.form["message"])).replace("\r\n", "</br>")
+        if len(message) > 1000:
+            return render_template("error.html")
         messages.save_message(chat_id, session["username"], message)
     else:
         messages.message_read(chat_id, session["username"])
@@ -138,6 +140,8 @@ def profile():
         file = request.files["file"]
         if file:
             profiles.add_profile_picture(file)
+        if len(request.form.get("bio")) > 1000:
+            return render_template("error.html")
         updated_profile = {}
         for key, value in request.form.items():
             if key == "languages":
@@ -243,7 +247,10 @@ def add_post():
     if session["csrf_token"] != request.form["csrf_token"]:
         return render_template("error.html")
     content = str(escape(request.form.get("content"))).replace("\r\n", "</br>")
-    posts.add_post(session["username"], request.form.get("title"), content)
+    title = request.form.get("title")
+    if len(content) > 2000 or len(title) > 150:
+        return render_template("error.html")
+    posts.add_post(session["username"], title, content)
     return redirect("/home")
 
 
@@ -253,6 +260,8 @@ def add_comment():
         return render_template("error.html")
     post_id = request.args.get("post_id")
     content = str(escape(request.form.get("content"))).replace("\r\n", "</br>")
+    if len(content) > 1000:
+        return render_template("error.html")
     posts.add_comment(post_id, session["username"], content)
     return redirect(f"/open_post?id={post_id}")
 
