@@ -5,7 +5,7 @@
     <form action="/add_post" method="POST">
         <h1>Make a post</h1>
         <p>Title:<br>
-        <input type="text" name="title"></p>
+        <input type="text" name="title" pattern="\w{1,150}" title="Title can have max. 150 characters" required></p>
         <p>Post:<br>
         <textarea type="text" name="content"></textarea></p>
         <input type="submit" value="Post" class="button">
