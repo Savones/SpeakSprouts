@@ -157,6 +157,8 @@ def profile():
 @app.route('/profile_picture')
 def profile_picture():
     data = profiles.get_profile_picture(request.args.get("username"))
+    if len(data) > 100*1024:
+        return None
     return send_file(io.BytesIO(data), mimetype='image/jpeg')
 
 
@@ -257,6 +259,3 @@ def add_comment():
 def delete_account():
     users.delete_user(session["username"])
     return redirect("/")
-
-# Most important to-do's:
-    # data validation to chats, posts and comments, profile pic and bio
