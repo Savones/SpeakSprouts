@@ -2,10 +2,10 @@
 
 A platform for language learners to connect with each other and practice languages by chatting and interacting with community posts. Users can create profiles and find language partners.
 
-- #please-note
-- #current-functionalities
-- #known-issues
-- #instructions-for-testing
+- [Please Note](#please-note)
+- [Current Functionalities](#current-functionalities)
+- [Known Issues](#known-issues)
+- [Instructions for Testing](#instructions-for-testing)
 
 ### Please note
 The latest version of this app is running at a friends 
@@ -90,3 +90,8 @@ Run the program with:
 ```
 flask run
 ```
+## Expansion ideas
+
+- Searching people based on languages
+- More advanced community post features, for example ability to like posts and comments, getting notifications when post is commented on, answering directly to a specific comment etc.
+- Ability to block people, delete messages and posts/comments
