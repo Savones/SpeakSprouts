@@ -5,9 +5,9 @@
     <form action="/add_post" method="POST">
         <h1>Make a post</h1>
         <p>Title:<br>
-        <input type="text" name="title" pattern="\w{1,150}" title="Title can have max. 150 characters" required></p>
+        <input type="text" name="title" pattern="^.{1,150}" title="Title can have max. 150 characters" required></p>
         <p>Post:<br>
-        <textarea type="text" name="content"></textarea></p>
+        <textarea maxlength="2000" type="text" name="content"></textarea></p>
         <input type="submit" value="Post" class="button">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
@@ -20,7 +20,7 @@
     </div>
     <form action="/add_comment?post_id={{ post.id }}" method="POST">
         <h3>Comment</h3>
-        <textarea type="text" name="content"></textarea></p>
+        <textarea maxlength="1000" type="text" name="content"></textarea></p>
         <input type="submit" value="Comment" class="button">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>

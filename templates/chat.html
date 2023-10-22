@@ -28,7 +28,7 @@
     </div>
     
     <form class="chat_form" method="POST" action="/chat?username={{ other_chatter }}">
-        <textarea type="text" name="message"></textarea><br>
+        <textarea maxlength="1000" type="text" name="message"></textarea><br>
         <input type="submit" value="Send" class="button">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
