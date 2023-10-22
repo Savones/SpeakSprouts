@@ -9,11 +9,13 @@ A platform for language learners to connect with each other and practice languag
 - [Expansion ideas](#expansion-ideas)
 
 ### Please note
-The latest version of this app is running at a friends 
+- The latest version of this app is running at a friends 
 server. And to automate the fetching I have merged his pull request. The merged 
 code only affects the automation and not the content of the app itself. 
 So please note that the merged files should not be part of my grading.
 You can view all of these changes [here](https://github.com/Savones/SpeakSprouts/pull/1).
+- The languages.json file used for the languages table is from [here](https://gist.github.com/joshuabaker/d2775b5ada7d1601bcd7b31cb4081981).
+- ChatGPT used to come up with 20 fake profiles to populate the database for testing purposes.
 
 ## Current functionalities
 
