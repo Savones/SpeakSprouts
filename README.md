@@ -6,6 +6,7 @@ A platform for language learners to connect with each other and practice languag
 - [Current Functionalities](#current-functionalities)
 - [Known Issues](#known-issues)
 - [Instructions for Testing](#instructions-for-testing)
+- [Expansion ideas](#expansion-ideas)
 
 ### Please note
 The latest version of this app is running at a friends 
@@ -92,6 +93,7 @@ flask run
 ```
 ## Expansion ideas
 
+- **Admin user** with functionalities like banning people and viewing statistics
 - Searching people based on languages
 - More advanced community post features, for example ability to like posts and comments, getting notifications when post is commented on, answering directly to a specific comment etc.
 - Ability to block people, delete messages and posts/comments
