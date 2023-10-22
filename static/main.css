@@ -6,7 +6,11 @@
     --dark1: #1a1625;
     --neon-green: #22dfd07a;
     --neon-lilac: #ba82ff;
-  }
+}
+
+p {
+    overflow-x: auto;
+}
 
 body {
     margin: 0px;
@@ -24,7 +28,7 @@ h2 {
     padding-bottom: 20px;
 }
 
-li{
+li {
     display: flex;
     list-style: none;
     padding-right: 50px;
@@ -208,7 +212,7 @@ nav {
     overflow-y: auto;
 }
 
-.find_container div{
+.find_container div {
     width: 300px;
 }
 
@@ -545,7 +549,7 @@ textarea {
     right: 90px;
     top: 25px;
     font-size: 14px;
-  }
+}
 
 .dark_lilac {
     color: #ffffff;
