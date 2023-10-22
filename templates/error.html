@@ -6,5 +6,10 @@
         {% if hint %}
             <p>Hint: {{ hint }}</p>
         {% endif %}
+        {% if session.username %}
+            <a href="/home" class="button">Return</a>
+        {% else %}
+            <a href="/logout" class="button">Return</a>
+        {% endif %}
     </div>
 {% endblock %}

@@ -75,7 +75,10 @@ def register():
 @app.route("/home")
 def home():
     if "username" not in session:
-        return redirect("/")
+        return render_template(
+            "error.html",
+            hint="You need to be logged in to access this page."
+        )
     try:
         find_users, found = users.search_users(
             request.args["query"], session["username"])
@@ -96,16 +99,23 @@ def home():
 
 @app.route("/logout")
 def logout():
-    del session["username"]
+    if session.get("username"):
+        del session["username"]
     return redirect("/")
 
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
     if "username" not in session:
-        return redirect("/")
+        return render_template(
+            "error.html",
+            hint="You need to be logged in to access this page."
+        )
     if not partners.check_partner(session["username"], request.args.get("username")):
-        return redirect("/home")
+        return render_template(
+            "error.html",
+            hint="You have to be language partners to open chat with a user."
+        )
 
     chat_id = messages.get_chat_id(
         session["username"], request.args.get("username"))
@@ -141,7 +151,10 @@ def chat():
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
     if "username" not in session:
-        return redirect("/")
+        return render_template(
+            "error.html",
+            hint="You need to be logged in to access this page."
+        )
 
     session["profile_username"] = request.args.get("username")
 
@@ -180,7 +193,10 @@ def profile():
 @app.route('/profile_picture')
 def profile_picture():
     if "username" not in session:
-        return redirect("/")
+        return render_template(
+            "error.html",
+            hint="You need to be logged in to access this page."
+        )
 
     data = profiles.get_profile_picture(request.args.get("username"))
     if data and len(data) > 100*1024:
@@ -191,7 +207,10 @@ def profile_picture():
 @app.route("/edit_profile")
 def edit_profile():
     if "username" not in session:
-        return redirect("/")
+        return render_template(
+            "error.html",
+            hint="You need to be logged in to access this page."
+        )
 
     deleted = request.args.get("deleted")
     language = request.args.get("language")
@@ -217,7 +236,10 @@ def edit_profile():
 @app.route("/sent_request", methods=["GET", "POST"])
 def sent_request():
     if "username" not in session:
-        return redirect("/")
+        return render_template(
+            "error.html",
+            hint="You need to be logged in to access this page."
+        )
 
     if session["csrf_token"] != request.form["csrf_token"]:
         return render_template("error.html")
@@ -233,7 +255,10 @@ def sent_request():
 @app.route("/notifications")
 def users_notifications():
     if "username" not in session:
-        return redirect("/")
+        return render_template(
+            "error.html",
+            hint="You need to be logged in to access this page."
+        )
     return render_template(
         "notifications.html",
         notifications=partners.get_requests(session["username"])
@@ -243,7 +268,10 @@ def users_notifications():
 @app.route("/request_answer")
 def request_answer():
     if "username" not in session:
-        return redirect("/")
+        return render_template(
+            "error.html",
+            hint="You need to be logged in to access this page."
+        )
 
     user_id = request.args.get("id")
     if not user_id:
@@ -258,7 +286,10 @@ def request_answer():
 @app.route("/open_post")
 def open_post():
     if "username" not in session:
-        return redirect("/")
+        return render_template(
+            "error.html",
+            hint="You need to be logged in to access this page."
+        )
 
     post_id = request.args.get("id")
     post_info = "None"
@@ -272,7 +303,10 @@ def open_post():
 @app.route("/add_post", methods=["POST"])
 def add_post():
     if "username" not in session:
-        return redirect("/")
+        return render_template(
+            "error.html",
+            hint="You need to be logged in to access this page."
+        )
 
     if session["csrf_token"] != request.form["csrf_token"]:
         return render_template(
@@ -293,7 +327,10 @@ def add_post():
 @app.route("/add_comment", methods=["POST"])
 def add_comment():
     if "username" not in session:
-        return redirect("/")
+        return render_template(
+            "error.html",
+            hint="You need to be logged in to access this page."
+        )
 
     if session["csrf_token"] != request.form["csrf_token"]:
         return render_template(
@@ -314,6 +351,9 @@ def add_comment():
 @app.route("/delete_account")
 def delete_account():
     if "username" not in session:
-        return redirect("/")
+        return render_template(
+            "error.html",
+            hint="You need to be logged in to access this page."
+        )
     users.delete_user(session["username"])
     return redirect("/")
