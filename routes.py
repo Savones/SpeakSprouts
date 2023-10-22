@@ -179,8 +179,11 @@ def profile():
 
 @app.route('/profile_picture')
 def profile_picture():
+    if "username" not in session:
+        return redirect("/")
+
     data = profiles.get_profile_picture(request.args.get("username"))
-    if len(data) > 100*1024:
+    if data and len(data) > 100*1024:
         return None
     return send_file(io.BytesIO(data), mimetype='image/jpeg')
 
@@ -195,7 +198,7 @@ def edit_profile():
     level = request.args.get("level")
     language_id = request.args.get("id")
 
-    if level and id:
+    if level and language_id:
         profiles.update_level(language_id, session["username"], level)
     if language:
         profiles.update_language(language, session["username"])
@@ -213,6 +216,9 @@ def edit_profile():
 
 @app.route("/sent_request", methods=["GET", "POST"])
 def sent_request():
+    if "username" not in session:
+        return redirect("/")
+
     if session["csrf_token"] != request.form["csrf_token"]:
         return render_template("error.html")
     message = request.form.get("message")
@@ -236,6 +242,9 @@ def users_notifications():
 
 @app.route("/request_answer")
 def request_answer():
+    if "username" not in session:
+        return redirect("/")
+
     user_id = request.args.get("id")
     if not user_id:
         other_username = request.args.get("username")
@@ -250,6 +259,7 @@ def request_answer():
 def open_post():
     if "username" not in session:
         return redirect("/")
+
     post_id = request.args.get("id")
     post_info = "None"
     post_comments = []
@@ -261,6 +271,9 @@ def open_post():
 
 @app.route("/add_post", methods=["POST"])
 def add_post():
+    if "username" not in session:
+        return redirect("/")
+
     if session["csrf_token"] != request.form["csrf_token"]:
         return render_template(
             "error.html",
@@ -279,6 +292,9 @@ def add_post():
 
 @app.route("/add_comment", methods=["POST"])
 def add_comment():
+    if "username" not in session:
+        return redirect("/")
+
     if session["csrf_token"] != request.form["csrf_token"]:
         return render_template(
             "error.html",
@@ -297,5 +313,7 @@ def add_comment():
 
 @app.route("/delete_account")
 def delete_account():
+    if "username" not in session:
+        return redirect("/")
     users.delete_user(session["username"])
     return redirect("/")
