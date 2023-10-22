@@ -4,10 +4,13 @@ from services.mod import get_id
 
 
 def get_post_info(post_id):
-    sql = text("""SELECT cp.*, u.username 
+    sql = text("""
+               SELECT cp.*, u.username
                FROM community_posts cp 
                JOIN users u ON cp.author_id = u.id 
-               WHERE cp.id = :id""")
+               WHERE cp.id = :id
+               """
+               )
     post_info = db.session.execute(sql, {"id": post_id}).fetchone()
 
     return {
@@ -29,8 +32,8 @@ def get_posts(author=None):
             "SELECT id FROM community_posts WHERE author_id = :author_id ORDER BY created_at DESC")
         all_posts_ids = db.session.execute(
             sql, {"author_id": get_id(author)}).fetchall()
-    for id in all_posts_ids:
-        all_posts.append(get_post_info(id[0]))
+    for post_id in all_posts_ids:
+        all_posts.append(get_post_info(post_id[0]))
     return all_posts
 
 

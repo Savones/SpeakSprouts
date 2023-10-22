@@ -24,7 +24,9 @@ def read_json():
                 VALUES (:language_name, :native_name, :iso_639_1_code)"""
             )
             db.session.execute(sql, {
-                "language_name": language_name, "native_name": native_name, "iso_639_1_code": iso_639_1_code
+                "language_name": language_name,
+                "native_name": native_name,
+                "iso_639_1_code": iso_639_1_code
             })
     db.session.commit()
 

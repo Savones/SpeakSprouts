@@ -2,7 +2,8 @@ import json
 import secrets
 import io
 import re
-from flask import render_template, request, redirect, session, send_file, escape
+from flask import render_template, request, redirect, session, send_file
+from markupsafe import escape
 from app import app
 import db
 import testing
